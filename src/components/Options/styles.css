@@ -1,4 +1,6 @@
 .options-wrapper {
   width: 100%;
-  min-height: 20rem;
+  min-height: 10rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }

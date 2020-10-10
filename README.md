@@ -4,12 +4,19 @@
 
 This single-page-application showcases a fluid and responsive user interface for viewing Cats facts.
 
-Developed with the help of the following libraries
+Developed with the help of the following libraries and apis:
 
+- Cat API
+  https://thecatapi.com/
 - React
 - Create React App
 - Bootstrap
 - Spectre.css
+- Illustration and logo from Undraw
+  https://undraw.co/
+- React-localization
+- React-reveal
+- React-Icons
 
 ## Available Scripts
 
