@@ -1,4 +1,32 @@
 .logo-image {
-  width: 4rem;
   height: 4rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  background: #3f3d56;
+  border-radius: 34px;
+}
+.logo-github {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+  margin: 0.5rem;
+  background: #3f3d56;
+  border-radius: 34px;
+}
+
+.catinder-logo {
+  font-family: "Poppins", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  text-shadow: 4px 4px 0px #3f3d56;
+}
+
+.catinder-navi {
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  text-shadow: 4px 4px 0px #3f3d56;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

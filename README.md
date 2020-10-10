@@ -1,4 +1,15 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Catinder
+
+## Created by Erkka Virtanen ( vidnyte )
+
+This single-page-application showcases a fluid and responsive user interface for viewing Cats facts.
+
+Developed with the help of the following libraries
+
+- React
+- Create React App
+- Bootstrap
+- Spectre.css
 
 ## Available Scripts
 

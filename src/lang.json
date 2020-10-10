@@ -1,0 +1,30 @@
+{
+  "en": {
+    "header": {
+      "github": "github"
+    },
+    "options": {
+      "success": "Post sent succesfully",
+      "thanks": "Thank you for your message",
+      "couldNotLoadForm": "Could not load form",
+      "tryRefreshing": "Please try refreshing the page"
+    },
+    "results": {
+      "copyright": "All rights reserved"
+    }
+  },
+  "fi": {
+    "header": {
+      "github": "github"
+    },
+    "options": {
+      "success": "Post sent succesfully",
+      "thanks": "Thank you for your message",
+      "couldNotLoadForm": "Could not load form",
+      "tryRefreshing": "Please try refreshing the page"
+    },
+    "results": {
+      "copyright": "All rights reserved"
+    }
+  }
+}
