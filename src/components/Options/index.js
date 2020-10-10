@@ -34,6 +34,7 @@ class Options extends React.Component {
       errorMessage: "",
       results: [],
       loadingResults: false,
+      view: "breeds",
     };
 
     this.setup = this.setup.bind(this);
@@ -193,96 +194,130 @@ class Options extends React.Component {
     }
 
     return (
-      <div className="container">
-        <Fade bottom>
-          <div className="row options-wrapper">
-            <div className="col-6">
-              <div className="form-group">
-                <label className="form-label" htmlFor="input-search">
-                  Search
-                </label>
-                <div className="has-icon-right">
-                  <DebounceInput
-                    className="form-input"
-                    type="text"
-                    placeholder="Search..."
-                    value={this.state.search}
-                    minLength={2}
-                    debounceTimeout={300}
-                    onChange={this.handleSearch}
-                  />
-                  <i className="form-icon icon icon-search" />
-                </div>
-              </div>
-            </div>
-            <div className="col-3">
-              <div className="form-group">
-                <label className="form-label" htmlFor="input-breed">
-                  Breed
-                </label>
+      <>
+        <ul className="tab tab-block">
+          <li
+            className={
+              this.state.view === "breeds" ? "tab-item active" : "tab-item"
+            }
+            onClick={() => {
+              this.setState({ view: "breeds" });
+            }}
+          >
+            <a href="#">{lang.tabs.breeds}</a>
+          </li>
+          <li
+            className={
+              this.state.view === "images" ? "tab-item active" : "tab-item"
+            }
+            onClick={() => {
+              this.setState({ view: "images" });
+            }}
+          >
+            <a href="#">{lang.tabs.images}</a>
+          </li>
+          <li
+            className={
+              this.state.view === "favorites" ? "tab-item active" : "tab-item"
+            }
+            onClick={() => {
+              this.setState({ view: "favorites" });
+            }}
+          >
+            <a href="#">{lang.tabs.favorites}</a>
+          </li>
+        </ul>
+        <div className="container">
+          <Fade bottom>
+            <div className="row options-wrapper">
+              <div className="col-6">
                 <div className="form-group">
-                  <select
-                    className="form-select"
-                    id="input-breed"
-                    onChange={(event) => this.handleBreed(event.target.value)}
-                  >
-                    {breedOptions}
-                  </select>
+                  <label className="form-label" htmlFor="input-search">
+                    Search
+                  </label>
+                  <div className="has-icon-right">
+                    <DebounceInput
+                      className="form-input"
+                      type="text"
+                      placeholder="Search..."
+                      value={this.state.search}
+                      minLength={2}
+                      debounceTimeout={300}
+                      onChange={this.handleSearch}
+                    />
+                    <i className="form-icon icon icon-search" />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-3">
-              <div className="form-group">
-                <label className="form-label" htmlFor="input-category">
-                  Category
-                </label>
+              <div className="col-3">
                 <div className="form-group">
-                  <select
-                    className="form-select"
-                    id="input-category"
-                    onChange={(event) =>
-                      this.handleCategory(event.target.value)
-                    }
-                  >
-                    {categoryOptions}
-                  </select>
+                  <label className="form-label" htmlFor="input-breed">
+                    Breed
+                  </label>
+                  <div className="form-group">
+                    <select
+                      className="form-select"
+                      id="input-breed"
+                      onChange={(event) => this.handleBreed(event.target.value)}
+                    >
+                      {breedOptions}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className="col-3">
+                <div className="form-group">
+                  <label className="form-label" htmlFor="input-category">
+                    Category
+                  </label>
+                  <div className="form-group">
+                    <select
+                      className="form-select"
+                      id="input-category"
+                      onChange={(event) =>
+                        this.handleCategory(event.target.value)
+                      }
+                    >
+                      {categoryOptions}
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            {this.state.loadingResults ? (
+            <div className="row">
+              {this.state.loadingResults ? (
+                <div className="col-12">
+                  {" "}
+                  <Loading />{" "}
+                </div>
+              ) : (
+                tiles
+              )}
               <div className="col-12">
-                {" "}
-                <Loading />{" "}
-              </div>
-            ) : (
-              tiles
-            )}
-            <div className="col-12">
-              <div className="panel-footer">
-                <ReactPaginate
-                  previousLabel={lang.pagination.previous}
-                  nextLabel={lang.pagination.next}
-                  breakLabel={"..."}
-                  breakClassName={"break-me"}
-                  pageCount={this.state.pageCount}
-                  forcePage={this.state.page}
-                  marginPagesDisplayed={this.state.neighgbours}
-                  pageRangeDisplayed={this.state.pageRange}
-                  onPageChange={this.handlePageClick}
-                  initialPage={this.state.page}
-                  containerClassName={"pagination justify-content-center"}
-                  pageClassName={"page-item"}
-                  activeClassName={"page-item active"}
-                  previousClassName={"page-item"}
-                  nextClassName={"page-item"}
-                />
+                <div className="panel-footer">
+                  <ReactPaginate
+                    previousLabel={lang.pagination.previous}
+                    nextLabel={lang.pagination.next}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={this.state.pageCount}
+                    forcePage={this.state.page}
+                    marginPagesDisplayed={this.state.neighgbours}
+                    pageRangeDisplayed={this.state.pageRange}
+                    onPageChange={this.handlePageClick}
+                    initialPage={this.state.page}
+                    containerClassName={"pagination justify-content-center"}
+                    pageClassName={"page-item"}
+                    activeClassName={"page-item active"}
+                    previousClassName={"page-item"}
+                    nextClassName={"page-item"}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </Fade>
-      </div>
+          </Fade>
+        </div>
+      </>
     );
   }
 }

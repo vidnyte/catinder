@@ -15,6 +15,11 @@
     "pagination": {
       "next": "Next",
       "Previous": "Previous"
+    },
+    "tabs": {
+      "breeds": "Breeds",
+      "images": "Images",
+      "favorites": "Favorites"
     }
   },
   "fi": {
@@ -33,6 +38,11 @@
     "pagination": {
       "next": "Next",
       "Previous": "Previous"
+    },
+    "tabs": {
+      "breeds": "Breeds",
+      "images": "Images",
+      "favorites": "Favorites"
     }
   }
 }
