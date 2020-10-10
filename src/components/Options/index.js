@@ -16,6 +16,13 @@ import langFile from "./../../lang.json";
 
 const lang = new LocalizedStrings(langFile);
 
+let view = localStorage.getItem("view");
+
+if (!view) {
+  localStorage.setItem("view", "breeds");
+  view = "breeds";
+}
+
 class Options extends React.Component {
   constructor(props) {
     super(props);
@@ -34,13 +41,14 @@ class Options extends React.Component {
       errorMessage: "",
       results: [],
       loadingResults: false,
-      view: "breeds",
+      view,
     };
 
     this.setup = this.setup.bind(this);
     this.handleBreed = this.handleBreed.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
+    this.handleViewClick = this.handleViewClick.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.doSearch = this.doSearch.bind(this);
   }
@@ -69,6 +77,11 @@ class Options extends React.Component {
         console.log("getCategories error: ", e);
         this.setState({ error: true, errorMessage: e.message });
       });
+  }
+
+  handleViewClick(view) {
+    this.setState({ view });
+    localStorage.setItem("view", view);
   }
 
   handleSearch(event) {
@@ -201,7 +214,7 @@ class Options extends React.Component {
               this.state.view === "breeds" ? "tab-item active" : "tab-item"
             }
             onClick={() => {
-              this.setState({ view: "breeds" });
+              this.handleViewClick("breeds");
             }}
           >
             <a href="#">{lang.tabs.breeds}</a>
@@ -211,7 +224,7 @@ class Options extends React.Component {
               this.state.view === "images" ? "tab-item active" : "tab-item"
             }
             onClick={() => {
-              this.setState({ view: "images" });
+              this.handleViewClick("images");
             }}
           >
             <a href="#">{lang.tabs.images}</a>
@@ -221,7 +234,7 @@ class Options extends React.Component {
               this.state.view === "favorites" ? "tab-item active" : "tab-item"
             }
             onClick={() => {
-              this.setState({ view: "favorites" });
+              this.handleViewClick("favorites");
             }}
           >
             <a href="#">{lang.tabs.favorites}</a>
