@@ -1,4 +1,14 @@
 .footer-image {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.footer-wrapper {
+  margin-top: 3rem;
+}
+
+.footer-subtitle {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
 }

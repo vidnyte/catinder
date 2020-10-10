@@ -5,9 +5,9 @@ const imagePath = process.env.PUBLIC_URL + "/assets/images/catinder-logo.svg";
 
 function Footer() {
   return (
-    <footer className="App-footer">
+    <footer className="footer-wrapper">
+      <p className="footer-subtitle">Catinder - find your companion!</p>
       <img src={imagePath} className="footer-image" alt="Catinder logo" />
-      <p>Catinder - find your companion!</p>
     </footer>
   );
 }

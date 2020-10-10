@@ -12,6 +12,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-localization": "^1.0.15",
+    "react-paginate": "^6.5.0",
     "react-reveal": "^1.2.2",
     "react-scripts": "3.4.3"
   },

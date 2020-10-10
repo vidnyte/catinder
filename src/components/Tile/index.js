@@ -19,21 +19,23 @@ class Tile extends React.Component {
 
   render() {
     return (
-      <div className="tile">
-        <div className="tile-icon">
-          <div className="example-tile-icon">
-            <img className={"tile-image"} src={this.props.imageUrl} />
+      <div className="col-4">
+        <div className="tile">
+          <div className="tile-icon">
+            <div className="example-tile-icon">
+              <img className={"tile-image"} src={this.props.imageUrl} />
+            </div>
           </div>
-        </div>
-        <div className="tile-content">
-          <p className="tile-title">The Avengers</p>
-          <p className="tile-subtitle">
-            Earth's Mightiest Heroes joined forces to take on threats that were
-            too big for any one hero to tackle...
-          </p>
-        </div>
-        <div className="tile-action">
-          <button className="btn btn-primary">Join</button>
+          <div className="tile-content">
+            <p className="tile-title">The Avengers</p>
+            <p className="tile-subtitle">
+              Earth's Mightiest Heroes joined forces to take on threats that
+              were too big for any one hero to tackle...
+            </p>
+          </div>
+          <div className="tile-action">
+            <button className="btn btn-primary">Join</button>
+          </div>
         </div>
       </div>
     );

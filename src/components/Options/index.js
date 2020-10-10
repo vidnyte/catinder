@@ -1,21 +1,30 @@
 import React from "react";
+import LocalizedStrings from "react-localization";
+import ReactPaginate from "react-paginate";
 import Tile from "./../Tile";
 import Loading from "./../Loading";
 import { searchCats, getBreeds, getCategories } from "./../../controllers/cat";
 import "./styles.css";
 
+import langFile from "./../../lang.json";
+
+const lang = new LocalizedStrings(langFile);
+
 class Options extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pageCount: 0,
+      page: 0,
+      limit: 10,
+      neighbours: 2,
+      pageRange: 5,
       breedId: "",
       breeds: [],
       categoryIds: [],
       categories: [],
       error: false,
       errorMessage: "",
-      page: 0,
-      limit: 20,
       results: [],
       loadingResults: false,
     };
@@ -23,6 +32,7 @@ class Options extends React.Component {
     this.setup = this.setup.bind(this);
     this.handleBreed = this.handleBreed.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
+    this.handlePageClick = this.handlePageClick.bind(this);
     this.doSearch = this.doSearch.bind(this);
   }
 
@@ -70,7 +80,11 @@ class Options extends React.Component {
         )
           .then((results) => {
             console.log("doSearch results: ", results);
-            this.setState({ results, loadingResults: false });
+            this.setState({
+              results,
+              loadingResults: false,
+              pageCount: Math.ceil(results.length / 5),
+            });
           })
           .catch((e) => {
             console.log("error: ", e);
@@ -107,6 +121,18 @@ class Options extends React.Component {
     this.setState(
       {
         categoryIds: categoryIdList,
+      },
+      () => {
+        this.doSearch();
+      }
+    );
+  }
+
+  handlePageClick(page) {
+    console.log("selected: ", page.selected);
+    this.setState(
+      {
+        page: page.selected,
       },
       () => {
         this.doSearch();
@@ -208,8 +234,27 @@ class Options extends React.Component {
           </div>
         </div>
         <div className="row">
+          {this.state.loadingResults ? <Loading /> : tiles}
           <div className="col-12">
-            {this.state.loadingResults ? <Loading /> : tiles}
+            <div className="panel-footer">
+              <ReactPaginate
+                previousLabel={lang.pagination.previous}
+                nextLabel={lang.pagination.next}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={this.state.pageCount}
+                forcePage={this.state.page}
+                marginPagesDisplayed={this.state.neighgbours}
+                pageRangeDisplayed={this.state.pageRange}
+                onPageChange={this.handlePageClick}
+                initialPage={this.state.page}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                activeClassName={"page-item active"}
+                previousClassName={"page-item"}
+                nextClassName={"page-item"}
+              />
+            </div>
           </div>
         </div>
       </div>
