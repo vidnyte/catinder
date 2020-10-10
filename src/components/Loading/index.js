@@ -6,7 +6,7 @@ import langFile from "./../../lang.json";
 const lang = new LocalizedStrings(langFile);
 
 function Loading() {
-  return <div className="loading-wrapper">LOADING...</div>;
+  return <div className="loading loading-lg loading-wrapper">LOADING...</div>;
 }
 
 export default Loading;

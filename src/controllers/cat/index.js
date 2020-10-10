@@ -9,18 +9,17 @@ dotenv.config();
 const API_URL = process.env.REACT_APP_CAT_API_URL;
 const API_KEY = process.env.REACT_APP_CAT_API_KEY;
 
-console.log("api_url: ", API_URL);
-console.log("api_key 2: ", API_KEY);
-
-export const searchCats = (breed_id, page, limit) => {
+export const searchCats = (breed_id, category_ids, page, limit) => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${API_URL}/images/search`, {
-        headers: { "x-api-key": API_KEY },
-        params: { page, limit, breed_id, order: "desc", api_key: API_KEY },
+        headers: {
+          "x-api-key": API_KEY,
+        },
+        params: { page, limit, breed_id, category_ids, order: "desc" },
       })
       .then((response) => {
-        console.log("response.data: ", response.data);
+        console.log("searchCats response.data: ", response.data);
         if (response.data) {
           resolve(response.data);
         } else {
@@ -29,6 +28,51 @@ export const searchCats = (breed_id, page, limit) => {
       })
       .catch((err) => {
         reject(new Error("CAT_API_CONNECTION_ERROR"));
+      });
+  });
+};
+
+export const getBreeds = (page, limit) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${API_URL}/breeds`, {
+        headers: {
+          "x-api-key": API_KEY,
+        },
+        params: { page, limit },
+      })
+      .then((response) => {
+        if (response.data) {
+          resolve(response.data);
+        } else {
+          reject(new Error("GET_BREEDS_API_ERROR"));
+        }
+      })
+      .catch((err) => {
+        reject(new Error("GET_BREEDS_CONNECTION_ERROR"));
+      });
+  });
+};
+
+export const getCategories = (page, limit) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${API_URL}/categories`, {
+        headers: {
+          "x-api-key": API_KEY,
+        },
+        params: { page, limit },
+      })
+      .then((response) => {
+        console.log("response.data: ", response.data);
+        if (response.data) {
+          resolve(response.data);
+        } else {
+          reject(new Error("GET_CATEGORIES_API_ERROR"));
+        }
+      })
+      .catch((err) => {
+        reject(new Error("GET_CATEGORIES_CONNECTION_ERROR"));
       });
   });
 };
