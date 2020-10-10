@@ -32,6 +32,29 @@ export const searchCats = (breed_id, category_ids, page, limit) => {
   });
 };
 
+export const searchBreeds = (q) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${API_URL}/breeds/search`, {
+        headers: {
+          "x-api-key": API_KEY,
+        },
+        params: { q },
+      })
+      .then((response) => {
+        console.log("searchBreeds response.data: ", response.data);
+        if (response.data) {
+          resolve(response.data);
+        } else {
+          reject(new Error("SEARCH_BREEDS_ERROR"));
+        }
+      })
+      .catch((err) => {
+        reject(new Error("CAT_API_CONNECTION_ERROR"));
+      });
+  });
+};
+
 export const getBreeds = (page, limit) => {
   return new Promise((resolve, reject) => {
     axios

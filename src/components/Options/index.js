@@ -1,9 +1,15 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
+import { DebounceInput } from "react-debounce-input";
+import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
 import Tile from "./../Tile";
 import Loading from "./../Loading";
-import { searchCats, getBreeds, getCategories } from "./../../controllers/cat";
+import {
+  searchBreeds,
+  getBreeds,
+  getCategories,
+} from "./../../controllers/cat";
 import "./styles.css";
 
 import langFile from "./../../lang.json";
@@ -17,6 +23,7 @@ class Options extends React.Component {
       pageCount: 0,
       page: 0,
       limit: 10,
+      search: "",
       neighbours: 2,
       pageRange: 5,
       breedId: "",
@@ -33,7 +40,12 @@ class Options extends React.Component {
     this.handleBreed = this.handleBreed.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.doSearch = this.doSearch.bind(this);
+  }
+
+  componentDidMount() {
+    this.setup();
   }
 
   setup() {
@@ -58,26 +70,25 @@ class Options extends React.Component {
       });
   }
 
-  componentDidMount() {
-    this.setup();
+  handleSearch(event) {
+    const { value } = event.target;
+    console.log("value: ", value);
+    this.setState({
+      search: value,
+    });
+
+    if (value && value.length > 2) {
+      this.doSearch();
+    }
   }
 
   doSearch() {
-    console.log("breedId: ", this.state.breedId);
-    console.log("categoryIds: ", this.state.categoryIds);
-    console.log("page: ", this.state.page);
-    console.log("limit: ", this.state.limit);
     this.setState(
       {
         loadingResults: true,
       },
       () => {
-        searchCats(
-          this.state.breedId,
-          this.state.categoryIds.join(","),
-          this.state.page,
-          this.state.limit
-        )
+        searchBreeds(this.state.search)
           .then((results) => {
             console.log("doSearch results: ", results);
             this.setState({
@@ -183,80 +194,94 @@ class Options extends React.Component {
 
     return (
       <div className="container">
-        <div className="row options-wrapper">
-          <div className="col-6">
-            <div className="form-group">
-              <label className="form-label" htmlFor="input-search">
-                Search
-              </label>
-              <div className="has-icon-right">
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="Search..."
-                  id="input-search"
+        <Fade bottom>
+          <div className="row options-wrapper">
+            <div className="col-6">
+              <div className="form-group">
+                <label className="form-label" htmlFor="input-search">
+                  Search
+                </label>
+                <div className="has-icon-right">
+                  <DebounceInput
+                    className="form-input"
+                    type="text"
+                    placeholder="Search..."
+                    value={this.state.search}
+                    minLength={2}
+                    debounceTimeout={300}
+                    onChange={this.handleSearch}
+                  />
+                  <i className="form-icon icon icon-search" />
+                </div>
+              </div>
+            </div>
+            <div className="col-3">
+              <div className="form-group">
+                <label className="form-label" htmlFor="input-breed">
+                  Breed
+                </label>
+                <div className="form-group">
+                  <select
+                    className="form-select"
+                    id="input-breed"
+                    onChange={(event) => this.handleBreed(event.target.value)}
+                  >
+                    {breedOptions}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="col-3">
+              <div className="form-group">
+                <label className="form-label" htmlFor="input-category">
+                  Category
+                </label>
+                <div className="form-group">
+                  <select
+                    className="form-select"
+                    id="input-category"
+                    onChange={(event) =>
+                      this.handleCategory(event.target.value)
+                    }
+                  >
+                    {categoryOptions}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            {this.state.loadingResults ? (
+              <div className="col-12">
+                {" "}
+                <Loading />{" "}
+              </div>
+            ) : (
+              tiles
+            )}
+            <div className="col-12">
+              <div className="panel-footer">
+                <ReactPaginate
+                  previousLabel={lang.pagination.previous}
+                  nextLabel={lang.pagination.next}
+                  breakLabel={"..."}
+                  breakClassName={"break-me"}
+                  pageCount={this.state.pageCount}
+                  forcePage={this.state.page}
+                  marginPagesDisplayed={this.state.neighgbours}
+                  pageRangeDisplayed={this.state.pageRange}
+                  onPageChange={this.handlePageClick}
+                  initialPage={this.state.page}
+                  containerClassName={"pagination justify-content-center"}
+                  pageClassName={"page-item"}
+                  activeClassName={"page-item active"}
+                  previousClassName={"page-item"}
+                  nextClassName={"page-item"}
                 />
-                <i className="form-icon icon icon-search" />
               </div>
             </div>
           </div>
-          <div className="col-3">
-            <div className="form-group">
-              <label className="form-label" htmlFor="input-breed">
-                Breed
-              </label>
-              <div className="form-group">
-                <select
-                  className="form-select"
-                  id="input-breed"
-                  onChange={(event) => this.handleBreed(event.target.value)}
-                >
-                  {breedOptions}
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="form-group">
-              <label className="form-label" htmlFor="input-category">
-                Category
-              </label>
-              <div className="form-group">
-                <select
-                  className="form-select"
-                  id="input-category"
-                  onChange={(event) => this.handleCategory(event.target.value)}
-                >
-                  {categoryOptions}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          {this.state.loadingResults ? <Loading /> : tiles}
-          <div className="col-12">
-            <div className="panel-footer">
-              <ReactPaginate
-                previousLabel={lang.pagination.previous}
-                nextLabel={lang.pagination.next}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={this.state.pageCount}
-                forcePage={this.state.page}
-                marginPagesDisplayed={this.state.neighgbours}
-                pageRangeDisplayed={this.state.pageRange}
-                onPageChange={this.handlePageClick}
-                initialPage={this.state.page}
-                containerClassName={"pagination justify-content-center"}
-                pageClassName={"page-item"}
-                activeClassName={"page-item active"}
-                previousClassName={"page-item"}
-                nextClassName={"page-item"}
-              />
-            </div>
-          </div>
-        </div>
+        </Fade>
       </div>
     );
   }
