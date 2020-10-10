@@ -17,7 +17,7 @@ export const searchCats = (breed_id, page, limit) => {
     axios
       .get(`${API_URL}/images/search`, {
         headers: { "x-api-key": API_KEY },
-        params: { page, limit, breed_id, order: "desc" },
+        params: { page, limit, breed_id, order: "desc", api_key: API_KEY },
       })
       .then((response) => {
         console.log("response.data: ", response.data);
