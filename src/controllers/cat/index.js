@@ -10,7 +10,7 @@ const API_URL = process.env.REACT_APP_CAT_API_URL;
 const API_KEY = process.env.REACT_APP_CAT_API_KEY;
 
 console.log("api_url: ", API_URL);
-console.log("api_key: ", API_KEY);
+console.log("api_key 2: ", API_KEY);
 
 export const searchCats = (breed_id, page, limit) => {
   return new Promise((resolve, reject) => {
