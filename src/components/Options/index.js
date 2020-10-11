@@ -89,10 +89,11 @@ class Options extends React.Component {
       view,
       favoriteBreeds,
       originList: ORIGIN_LIST,
-      origin: null,
+      origin: "",
       temperamentsList: TEMPERAMENT_LIST,
       temperaments: [],
       breedsTotal: 0,
+      searchCloseIcon: false,
     };
 
     this.setup = this.setup.bind(this);
@@ -122,20 +123,14 @@ class Options extends React.Component {
         this.setState({ breedsTotal: data.length, breeds: data }, () => {
           const randomInt = Math.floor(Math.random() * this.state.breedsTotal);
 
-          console.log("this.state.breeds: ", this.state.breeds);
-          console.log("randomInt: ", randomInt);
-          console.log(
-            "this.state.breeds[randomInt]: ",
-            this.state.breeds[randomInt]
-          );
-
           this.setState({
             results: [this.state.breeds[randomInt]],
             pageCount: 0,
             page: 0,
-            origin: null,
+            origin: "",
             temperaments: [],
-            search: "",
+            search: this.state.breeds[randomInt].name,
+            searchCloseIcon: true,
           });
         });
       })
@@ -152,19 +147,13 @@ class Options extends React.Component {
           this.setState({ loadingResults: true }, () => {
             getBreeds(this.state.page, this.state.limit)
               .then((breeds) => {
-                console.log("getBreeds: ", breeds);
-                this.setState(
-                  {
-                    results: breeds,
-                    loadingResults: false,
-                    pageCount: Math.ceil(
-                      this.state.breedsTotal / this.state.limit
-                    ),
-                  },
-                  () => {
-                    console.log("PAGE COUNT: ", this.state.pageCount);
-                  }
-                );
+                this.setState({
+                  results: breeds,
+                  loadingResults: false,
+                  pageCount: Math.ceil(
+                    this.state.breedsTotal / this.state.limit
+                  ),
+                });
               })
               .catch((e) => {
                 console.log("getBreeds error: ", e);
@@ -196,45 +185,43 @@ class Options extends React.Component {
   }
 
   handleSearch(value) {
-    console.log("value: ", value);
     this.setState({
       search: value,
-      origin: null,
+      searchCloseIcon: true,
+      origin: "",
       temperaments: [],
     });
 
     if (value && value.length > 2) {
       this.doSearch();
+    } else {
+      this.setState({
+        search: value,
+        origin: "",
+        temperaments: [],
+        searchCloseIcon: false,
+      });
     }
   }
 
   handleOnSelect(val) {
-    console.log("handleOnSelect val: ", val);
-
-    this.setState({ search: val, origin: null, temperaments: [] }, () => {
-      this.doSearch();
-    });
+    this.setState(
+      { search: val, searchCloseIcon: true, origin: "", temperaments: [] },
+      () => {
+        this.doSearch();
+      }
+    );
   }
 
   filterBreeds() {
-    console.log("STEP 0 this.state.breeds: ", this.state.breeds);
-
     if (this.state.breeds) {
-      console.log("this.state.search: ", this.state.search);
       const breeds0 = this.state.breeds.filter((breed) => {
-        console.log("breed.name: ", breed.name);
-        console.log(
-          "this.state.search.includes(breed.name): ",
-          this.state.search.includes(breed.name)
-        );
         if (this.state.search.length > 2) {
           return this.state.search.includes(breed.name);
         } else {
           return true;
         }
       });
-
-      console.log("STEP 1 breeds0: ", breeds0);
 
       let breeds = breeds0;
       if (this.state.origin) {
@@ -243,16 +230,11 @@ class Options extends React.Component {
         });
       }
 
-      console.log("STEP 2 breeds: ", breeds);
-
       let breeds2 = breeds;
 
       if (this.state.temperaments.length > 0) {
         breeds2 = breeds.filter((brd) => {
-          console.log("brd.temperament: ", brd.temperament);
           const temps = brd.temperament.split(", ");
-          console.log("temps: ", temps);
-          console.log("this.state.temperaments: ", this.state.temperaments);
           let gotIt = true;
           this.state.temperaments.forEach((temp) => {
             if (!temps.includes(temp)) {
@@ -264,8 +246,6 @@ class Options extends React.Component {
         });
       }
 
-      console.log("STEP 3 breeds2: ", breeds2);
-
       return breeds2;
     } else {
       return [];
@@ -275,23 +255,10 @@ class Options extends React.Component {
   doSearch() {
     const results = this.filterBreeds();
 
-    console.log("doSearch RESULTS: ", results);
-
-    console.log("results.length: ", results.length);
-
-    console.log("this.state.page: ", this.state.page);
-
-    console.log(
-      "this.state.page + 1) * this.state.limit: ",
-      (this.state.page + 1) * this.state.limit
-    );
-
     const res = results.slice(
       this.state.page * this.state.limit,
       (this.state.page + 1) * this.state.limit
     );
-
-    console.log("RES XXX: ", res);
 
     this.setState({
       results: res,
@@ -305,8 +272,6 @@ class Options extends React.Component {
     const index = this.state.favoriteBreeds.findIndex((obj) => {
       return obj.id === breed.id;
     });
-
-    console.log("index: ", index);
 
     if (index < 0) {
       this.addFavoriteBreed(breed);
@@ -335,14 +300,8 @@ class Options extends React.Component {
   }
 
   addFavoriteBreed(breed) {
-    console.log("add favorite breed: ", breed);
-
-    console.log("this.state.favoriteBreeds: ", this.state.favoriteBreeds);
-
     const breeds = this.state.favoriteBreeds.map((a) => ({ ...a }));
     breeds.push(breed);
-
-    console.log("breeds: ", breeds);
 
     this.setState(
       {
@@ -357,31 +316,7 @@ class Options extends React.Component {
     );
   }
 
-  addFavoriteImage(image) {
-    console.log("add favorite image: ", image);
-
-    const images = this.state.favoriteImages.map((a) => ({ ...a }));
-
-    images.push(image);
-
-    console.log("images: ", images);
-
-    this.setState(
-      {
-        favoriteImages: images,
-      },
-      () => {
-        localStorage.setItem(
-          "favoriteImages",
-          JSON.stringify(this.state.favoriteImages)
-        );
-      }
-    );
-  }
-
   handleOrigin(origin) {
-    console.log("origin clicked: ", origin);
-
     this.setState(
       {
         origin: origin,
@@ -395,10 +330,7 @@ class Options extends React.Component {
   }
 
   handleTemperament(temperament) {
-    console.log("temperament clicked: ", temperament);
-
     const temperaments = this.state.temperaments;
-
     temperaments.push(temperament);
 
     this.setState(
@@ -414,7 +346,6 @@ class Options extends React.Component {
   }
 
   handlePageClick(page) {
-    console.log("selected: ", page.selected);
     this.setState(
       {
         page: page.selected,
@@ -428,21 +359,21 @@ class Options extends React.Component {
 
   renderBreeds() {
     const originOptions = [
-      <option key="origin-option" value="null" selected disabled>
+      <option key="origin-option" value="" defaultValue disabled>
         Choose origin
       </option>,
     ];
 
-    this.state.originList.map((origin) => {
+    this.state.originList.map((origin, index) => {
       originOptions.push(
-        <option key={origin.id} data-origin={origin}>
+        <option key={`${origin}_${index}`} data-origin={origin}>
           {origin}
         </option>
       );
     });
 
     const temperamentOptions = [
-      <option key="temperament-option" value={[]} selected disabled>
+      <option key="temperament-option" value={[]} defaultValue disabled>
         Add a Temperament Filter
       </option>,
     ];
@@ -502,7 +433,7 @@ class Options extends React.Component {
         tiles.push(
           <Tile
             key={data.id}
-            favorited={this.state.favoriteBreeds.findIndex(
+            favorited={this.state.favoriteBreeds.find(
               (breed) => breed.id === data.id
             )}
             breed={data.id}
@@ -590,7 +521,26 @@ class Options extends React.Component {
                     this.handleOnSelect(val);
                   }}
                 />
-                <i className="form-icon icon icon-search" />
+                <i
+                  onClick={() => {
+                    if (this.state.searchCloseIcon) {
+                      this.setState(
+                        {
+                          search: "",
+                          searchCloseIcon: false,
+                          origin: "",
+                          temperaments: [],
+                        },
+                        () => this.setup()
+                      );
+                    }
+                  }}
+                  className={
+                    this.state.searchCloseIcon
+                      ? "form-icon icon icon-cross cursorPointer"
+                      : "form-icon icon icon-search"
+                  }
+                />
               </div>
             </div>
           </div>
@@ -677,6 +627,10 @@ class Options extends React.Component {
         tiles.push(
           <Tile
             key={data.id}
+            favorited={this.state.favoriteBreeds.find(
+              (breed) => breed.id === data.id
+            )}
+            breed={data.id}
             handleFavoriteClick={this.handleFavoriteBreed}
             imageUrl={data.url}
             data={data}
@@ -684,8 +638,6 @@ class Options extends React.Component {
         );
       });
     }
-
-    console.log("tiles: ", tiles);
 
     const tabIconStyleLogo = {
       height: "3rem",
@@ -707,7 +659,6 @@ class Options extends React.Component {
               <span className="h3">{lang.favorites.noFavoritesYet}</span>
             </div>
           )}
-          {tiles}
         </div>
       </Fade>
     );

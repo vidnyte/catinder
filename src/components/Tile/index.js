@@ -33,7 +33,6 @@ class Tile extends React.Component {
     this.setState({ imageUrl: "" }, () => {
       getBreedImage()
         .then((data) => {
-          console.log("data: ", data);
           this.setState({
             imageUrl: data[0].url,
           });
@@ -119,7 +118,7 @@ class Tile extends React.Component {
             <div className="card-footer">
               <MdFavorite
                 style={{
-                  color: !this.props.favorited ? "#ff072a" : "rgb(63, 61, 86)",
+                  color: this.props.favorited ? "#ff072a" : "rgb(63, 61, 86)",
                   width: "3rem",
                   height: "3rem",
                   padding: "0.5rem",
@@ -128,11 +127,13 @@ class Tile extends React.Component {
               />
               <button
                 className={
-                  this.props.favorited ? "btn btn-primary" : "btn btn-secondary"
+                  !this.props.favorited
+                    ? "btn btn-primary"
+                    : "btn btn-secondary"
                 }
                 onClick={() => this.props.handleFavoriteClick(this.props.data)}
               >
-                {!this.props.favorited
+                {this.props.favorited
                   ? "Remove from Favorites"
                   : "Add to Favorites"}
               </button>
