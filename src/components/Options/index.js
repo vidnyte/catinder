@@ -3,6 +3,7 @@ import LocalizedStrings from "react-localization";
 import { DebounceInput } from "react-debounce-input";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
+import AutoSuggestInput from "./../AutoSuggestInput";
 import Tile from "./../Tile";
 import Loading from "./../Loading";
 import {
@@ -21,6 +22,20 @@ let view = localStorage.getItem("view");
 if (!view) {
   localStorage.setItem("view", "breeds");
   view = "breeds";
+}
+
+let favoriteBreeds = JSON.parse(localStorage.getItem("favoriteBreeds"));
+
+if (!favoriteBreeds) {
+  localStorage.setItem("favoriteBreeds", JSON.stringify([]));
+  favoriteBreeds = [];
+}
+
+let favoriteImages = JSON.parse(localStorage.getItem("favoriteImages"));
+
+if (!favoriteImages) {
+  localStorage.setItem("favoriteImages", JSON.stringify([]));
+  favoriteImages = [];
 }
 
 class Options extends React.Component {
@@ -42,15 +57,24 @@ class Options extends React.Component {
       results: [],
       loadingResults: false,
       view,
+      favoriteBreeds,
+      favoriteImages,
     };
 
     this.setup = this.setup.bind(this);
+    this.addFavoriteBreed = this.addFavoriteBreed.bind(this);
+    this.removeFavoriteBreed = this.removeFavoriteBreed.bind(this);
+    this.addFavoriteImage = this.addFavoriteImage.bind(this);
     this.handleBreed = this.handleBreed.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleViewClick = this.handleViewClick.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.doSearch = this.doSearch.bind(this);
+    this.renderBreeds = this.renderBreeds.bind(this);
+    this.renderImages = this.renderImages.bind(this);
+    this.renderFavorites = this.renderFavorites.bind(this);
+    this.handleFavoriteBreed = this.handleFavoriteBreed.bind(this);
   }
 
   componentDidMount() {
@@ -84,8 +108,7 @@ class Options extends React.Component {
     localStorage.setItem("view", view);
   }
 
-  handleSearch(event) {
-    const { value } = event.target;
+  handleSearch(value) {
     console.log("value: ", value);
     this.setState({
       search: value,
@@ -119,6 +142,90 @@ class Options extends React.Component {
               errorMessage: e.message,
             });
           });
+      }
+    );
+  }
+
+  handleFavoriteBreed(breed) {
+    const index = this.state.favoriteBreeds.findIndex((obj) => {
+      return obj.id === breed.id;
+    });
+
+    console.log("index: ", index);
+
+    if (index < 0) {
+      this.addFavoriteBreed(breed);
+    } else {
+      this.removeFavoriteBreed(breed);
+    }
+  }
+
+  removeFavoriteBreed(breed) {
+    console.log("remove favorite breed: ", breed);
+    console.log("this.state.favoriteBreeds: ", this.state.favoriteBreeds);
+
+    const removeIndex = this.state.favoriteBreeds.findIndex((obj) => {
+      return obj.id === breed.id;
+    });
+
+    const breeds = this.state.favoriteBreeds.splice(removeIndex, 1);
+
+    console.log("breeds: ", breeds);
+
+    this.setState(
+      {
+        favoriteBreeds: breeds,
+      },
+      () => {
+        localStorage.setItem(
+          "favoriteBreeds",
+          JSON.stringify(this.state.favoriteBreeds)
+        );
+      }
+    );
+  }
+
+  addFavoriteBreed(breed) {
+    console.log("add favorite breed: ", breed);
+
+    console.log("this.state.favoriteBreeds: ", this.state.favoriteBreeds);
+
+    const breeds = this.state.favoriteBreeds.map((a) => ({ ...a }));
+    breeds.push(breed);
+
+    console.log("breeds: ", breeds);
+
+    this.setState(
+      {
+        favoriteBreeds: breeds,
+      },
+      () => {
+        localStorage.setItem(
+          "favoriteBreeds",
+          JSON.stringify(this.state.favoriteBreeds)
+        );
+      }
+    );
+  }
+
+  addFavoriteImage(image) {
+    console.log("add favorite image: ", image);
+
+    const images = this.state.favoriteImages.map((a) => ({ ...a }));
+
+    images.push(image);
+
+    console.log("images: ", images);
+
+    this.setState(
+      {
+        favoriteImages: images,
+      },
+      () => {
+        localStorage.setItem(
+          "favoriteImages",
+          JSON.stringify(this.state.favoriteImages)
+        );
       }
     );
   }
@@ -165,7 +272,7 @@ class Options extends React.Component {
     );
   }
 
-  render() {
+  renderBreeds() {
     const breedOptions = [
       <option key="breed-option" disabled>
         Choose an option
@@ -202,10 +309,171 @@ class Options extends React.Component {
 
     if (this.state.results) {
       this.state.results.map((data) => {
-        tiles.push(<Tile key={data.id} imageUrl={data.url} data={data} />);
+        tiles.push(
+          <Tile
+            key={data.id}
+            favorited={this.state.favoriteBreeds.filter(
+              (breed) => breed.id === data.id
+            )}
+            handleFavoriteClick={this.handleFavoriteBreed}
+            imageUrl={data.url}
+            data={data}
+          />
+        );
       });
     }
 
+    return (
+      <Fade bottom>
+        <div className="row options-wrapper">
+          <div className="col-6">
+            <div className="form-group">
+              <label className="form-label" htmlFor="input-search">
+                Search
+              </label>
+              <div className="has-icon-right">
+                <AutoSuggestInput
+                  myInput={{
+                    className: "form-input",
+                    type: "text",
+                    placeholder: "Search...",
+                    value: this.state.search,
+                  }}
+                  onSuggestionClick={(suggestion) =>
+                    this.handleSearch(suggestion)
+                  }
+                  myOnChange={(e) => this.handleSearch(e.target.value)}
+                  breeds={this.state.breeds}
+                />
+                {/*
+                      <DebounceInput
+                      className="form-input"
+                      type="text"
+                      placeholder="Search..."
+                      value={this.state.search}
+                      minLength={2}
+                      debounceTimeout={300}
+                      onChange={this.handleSearch}
+                    />*/}
+
+                <i className="form-icon icon icon-search" />
+              </div>
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="form-group">
+              <label className="form-label" htmlFor="input-breed">
+                Breed
+              </label>
+              <div className="form-group">
+                <select
+                  className="form-select"
+                  id="input-breed"
+                  onChange={(event) => this.handleBreed(event.target.value)}
+                >
+                  {breedOptions}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="form-group">
+              <label className="form-label" htmlFor="input-category">
+                Category
+              </label>
+              <div className="form-group">
+                <select
+                  className="form-select"
+                  id="input-category"
+                  onChange={(event) => this.handleCategory(event.target.value)}
+                >
+                  {categoryOptions}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          {this.state.loadingResults ? (
+            <div className="col-12">
+              {" "}
+              <Loading />{" "}
+            </div>
+          ) : (
+            tiles
+          )}
+          <div className="col-12">
+            <div className="panel-footer">
+              <ReactPaginate
+                previousLabel={lang.pagination.previous}
+                nextLabel={lang.pagination.next}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={this.state.pageCount}
+                forcePage={this.state.page}
+                marginPagesDisplayed={this.state.neighgbours}
+                pageRangeDisplayed={this.state.pageRange}
+                onPageChange={this.handlePageClick}
+                initialPage={this.state.page}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                activeClassName={"page-item active"}
+                previousClassName={"page-item"}
+                nextClassName={"page-item"}
+              />
+            </div>
+          </div>
+        </div>
+      </Fade>
+    );
+  }
+
+  renderImages() {
+    return (
+      <Fade bottom>
+        <div className="row options-wrapper">
+          <div className="col-6"></div>
+        </div>
+      </Fade>
+    );
+  }
+
+  renderFavorites() {
+    const tiles = [];
+
+    if (this.state.favoriteBreeds) {
+      this.state.favoriteBreeds.map((data) => {
+        tiles.push(
+          <Tile
+            key={data.id}
+            handleFavoriteClick={this.handleFavoriteBreed}
+            imageUrl={data.url}
+            data={data}
+          />
+        );
+      });
+    }
+
+    console.log("tiles: ", tiles);
+
+    return (
+      <Fade bottom>
+        <div className="row options-wrapper">
+          <div className="col-12">
+            <h2>Breeds</h2>
+          </div>
+          {tiles}
+        </div>
+        <div className="row options-wrapper">
+          <div className="col-12">
+            <h2>Images</h2>
+          </div>
+        </div>
+      </Fade>
+    );
+  }
+
+  render() {
     return (
       <>
         <ul className="tab tab-block">
@@ -241,94 +509,11 @@ class Options extends React.Component {
           </li>
         </ul>
         <div className="container">
-          <Fade bottom>
-            <div className="row options-wrapper">
-              <div className="col-6">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="input-search">
-                    Search
-                  </label>
-                  <div className="has-icon-right">
-                    <DebounceInput
-                      className="form-input"
-                      type="text"
-                      placeholder="Search..."
-                      value={this.state.search}
-                      minLength={2}
-                      debounceTimeout={300}
-                      onChange={this.handleSearch}
-                    />
-                    <i className="form-icon icon icon-search" />
-                  </div>
-                </div>
-              </div>
-              <div className="col-3">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="input-breed">
-                    Breed
-                  </label>
-                  <div className="form-group">
-                    <select
-                      className="form-select"
-                      id="input-breed"
-                      onChange={(event) => this.handleBreed(event.target.value)}
-                    >
-                      {breedOptions}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="col-3">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="input-category">
-                    Category
-                  </label>
-                  <div className="form-group">
-                    <select
-                      className="form-select"
-                      id="input-category"
-                      onChange={(event) =>
-                        this.handleCategory(event.target.value)
-                      }
-                    >
-                      {categoryOptions}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              {this.state.loadingResults ? (
-                <div className="col-12">
-                  {" "}
-                  <Loading />{" "}
-                </div>
-              ) : (
-                tiles
-              )}
-              <div className="col-12">
-                <div className="panel-footer">
-                  <ReactPaginate
-                    previousLabel={lang.pagination.previous}
-                    nextLabel={lang.pagination.next}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={this.state.pageCount}
-                    forcePage={this.state.page}
-                    marginPagesDisplayed={this.state.neighgbours}
-                    pageRangeDisplayed={this.state.pageRange}
-                    onPageChange={this.handlePageClick}
-                    initialPage={this.state.page}
-                    containerClassName={"pagination justify-content-center"}
-                    pageClassName={"page-item"}
-                    activeClassName={"page-item active"}
-                    previousClassName={"page-item"}
-                    nextClassName={"page-item"}
-                  />
-                </div>
-              </div>
-            </div>
-          </Fade>
+          {this.state.view === "breeds"
+            ? this.renderBreeds()
+            : this.state.view === "images"
+            ? this.renderImages
+            : this.renderFavorites()}
         </div>
       </>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 import Zoom from "react-reveal/Zoom";
+import { MdFavorite } from "react-icons/md";
 import "./styles.css";
 
 class Tile extends React.Component {
@@ -54,6 +55,15 @@ class Tile extends React.Component {
               </div>
             </div>
             <div className="card-footer">
+              <MdFavorite
+                style={{
+                  color: !this.props.favorited ? "#ff072a" : "black",
+                  width: "2.5rem",
+                  height: "2.5rem",
+                  padding: "0.5rem",
+                }}
+                onClick={() => this.props.handleFavoriteClick(this.props.data)}
+              />
               <button className="btn btn-primary">Add to Favorites</button>
             </div>
           </div>
