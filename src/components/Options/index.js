@@ -51,7 +51,24 @@ const TEMPERAMENT_LIST = [
   "Tenacious",
 ];
 
-const ORIGIN_LIST = ["United States", "Greece", "United Kingdom"];
+const ORIGIN_LIST = [
+  "Australia",
+  "Burma",
+  "Canada",
+  "China",
+  "Cyprus",
+  "Egypt",
+  "France",
+  "Greece",
+  "Japan",
+  "Russia",
+  "Somalia",
+  "Singapore",
+  "Thailand",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States",
+];
 
 class Options extends React.Component {
   constructor(props) {
@@ -101,15 +118,11 @@ class Options extends React.Component {
   setup() {
     getBreeds()
       .then((data) => {
-        console.log("GOT DATA: ", data);
-        console.log("DATA.length: ", data.length);
-        this.setState({ breedsTotal: data.length }, () => {
+        this.setState({ breedsTotal: data.length, breeds: data }, () => {
           this.setState({ loadingResults: true }, () => {
             getBreeds(this.state.page, this.state.limit)
               .then((breeds) => {
                 console.log("getBreeds: ", breeds);
-                console.log("breedsTotal: ", this.state.breedsTotal);
-                console.log("breedsTotal: ", this.state.breedsTotal);
                 this.setState(
                   {
                     results: breeds,
@@ -176,26 +189,29 @@ class Options extends React.Component {
 
     if (this.state.breeds) {
       const breeds = this.state.breeds.filter((breed) => {
-        return this.state.origin !== breed.origin;
+        return this.state.origin === breed.origin;
       });
 
       console.log("STEP 2 breeds: ", breeds);
 
-      const breeds2 = breeds.filter((breed) => {
-        console.log("breed: ", breed);
-        const temps = breed.temperament.split(", ");
-        console.log(
-          "this.state.temperamentList: ",
-          this.state.temperamentsList
-        );
-        temps.forEach((temp) => {
-          if (this.state.temperaments.includes(temp)) {
-            return true;
-          } else {
-            return false;
-          }
+      let breeds2 = breeds;
+
+      if (this.state.temperaments.length > 0) {
+        breeds2 = breeds.filter((brd) => {
+          console.log("brd.temperament: ", brd.temperament);
+          const temps = brd.temperament.split(", ");
+          console.log("temps: ", temps);
+          console.log("this.state.temperaments: ", this.state.temperaments);
+          let gotIt = true;
+          this.state.temperaments.forEach((temp) => {
+            if (!temps.includes(temp)) {
+              gotIt = false;
+            }
+          });
+
+          return gotIt;
         });
-      });
+      }
 
       console.log("STEP 3 breeds2: ", breeds2);
 
@@ -360,7 +376,7 @@ class Options extends React.Component {
 
   renderBreeds() {
     const originOptions = [
-      <option key="origin-option" disabled>
+      <option key="origin-option" selected disabled>
         Choose origin
       </option>,
     ];
@@ -374,7 +390,7 @@ class Options extends React.Component {
     });
 
     const temperamentOptions = [
-      <option key="temperament-option" disabled>
+      <option key="temperament-option" selected disabled>
         Add a Temperament Filter
       </option>,
     ];
