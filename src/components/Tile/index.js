@@ -1,6 +1,8 @@
 import React from "react";
 import Zoom from "react-reveal/Zoom";
+import Loader from "react-loader-spinner";
 import { MdFavorite } from "react-icons/md";
+import { getBreedImage } from "./../../controllers/cat";
 import "./styles.css";
 
 class Tile extends React.Component {
@@ -8,9 +10,39 @@ class Tile extends React.Component {
     super(props);
     this.state = {
       open: props.open || false,
+      imageUrl: "",
     };
 
     this.open = this.open.bind(this);
+    this.newImage = this.newImage.bind(this);
+  }
+
+  componentDidMount() {
+    getBreedImage()
+      .then((data) => {
+        console.log("data: ", data);
+        this.setState({
+          imageUrl: data[0].url,
+        });
+      })
+      .catch((e) => {
+        console.log("error: ", e);
+      });
+  }
+
+  newImage() {
+    this.setState({ imageUrl: "" }, () => {
+      getBreedImage()
+        .then((data) => {
+          console.log("data: ", data);
+          this.setState({
+            imageUrl: data[0].url,
+          });
+        })
+        .catch((e) => {
+          console.log("error: ", e);
+        });
+    });
   }
 
   open() {
@@ -24,7 +56,11 @@ class Tile extends React.Component {
     const temperamentList = this.props.data.temperament.split(", ");
     temperamentList.map((temp) => {
       temperaments.push(
-        <span key={`${this.props.data.name}_${temp}`} className="chip">
+        <span
+          key={`${this.props.data.name}_${temp}`}
+          style={{ background: "#3f3d56" }}
+          className="chip"
+        >
           {temp}
         </span>
       );
@@ -34,32 +70,53 @@ class Tile extends React.Component {
       <div className="col-12 col-sm-6 col-md-4">
         <Zoom duration={250}>
           <div className="card">
-            <div className="card-image">
-              <img src={this.props.imageUrl} className="img-responsive" />
+            <div className="card-image" onClick={() => this.newImage()}>
+              {this.state.imageUrl ? (
+                <img
+                  src={this.state.imageUrl}
+                  className="breed-image tooltip"
+                  data-tooltip="Click me for more cute kittens!"
+                />
+              ) : (
+                <Loader
+                  type="ThreeDots"
+                  color="#ff072a"
+                  height={100}
+                  width={100}
+                />
+              )}
             </div>
             <div className="card-header">
-              <div className="card-title h5">{this.props.data.name}</div>
+              <div className="card-title h3">{this.props.data.name}</div>
+            </div>
+            <div className="card-body">
               <div className="card-subtitle text-gray">
                 {this.props.data.alt_names}
                 {temperaments}
               </div>
-            </div>
-            <div className="card-body">
-              {this.props.data.description}
+              <div className="card-description">
+                {this.props.data.description}
+              </div>
               <div className="card-subtitle text-gray">
-                Origin: {this.props.data.origin}
+                <span className="card-bold">
+                  Origin: {this.props.data.origin}
+                </span>
                 <br />
-                Life span: {this.props.data.life_span}
+                <span className="card-bold">
+                  Life span: {this.props.data.life_span} years
+                </span>
                 <br />
-                Adaptability: {this.props.data.adaptability}
+                <span className="card-bold">
+                  Adaptability: {this.props.data.adaptability} / 5
+                </span>
               </div>
             </div>
             <div className="card-footer">
               <MdFavorite
                 style={{
-                  color: !this.props.favorited ? "#ff072a" : "black",
-                  width: "2.5rem",
-                  height: "2.5rem",
+                  color: !this.props.favorited ? "#ff072a" : "rgb(63, 61, 86)",
+                  width: "3rem",
+                  height: "3rem",
                   padding: "0.5rem",
                 }}
                 onClick={() => this.props.handleFavoriteClick(this.props.data)}

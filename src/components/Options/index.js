@@ -316,6 +316,7 @@ class Options extends React.Component {
             favorited={this.state.favoriteBreeds.filter(
               (breed) => breed.id === data.id
             )}
+            breed={data.id}
             handleFavoriteClick={this.handleFavoriteBreed}
             imageUrl={data.url}
             data={data}
