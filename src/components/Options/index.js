@@ -5,7 +5,7 @@ import { MdFavorite, MdPets } from "react-icons/md";
 import { GiWhiteCat, GiNestedHearts } from "react-icons/gi";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
-import AutoSuggestInput from "./../AutoSuggestInput";
+import AutoComplete from "react-autocomplete";
 import Tile from "./../Tile";
 import Loading from "./../Loading";
 import {
@@ -67,6 +67,7 @@ class Options extends React.Component {
     this.renderBreeds = this.renderBreeds.bind(this);
     this.renderFavorites = this.renderFavorites.bind(this);
     this.handleFavoriteBreed = this.handleFavoriteBreed.bind(this);
+    this.handleOnSelect = this.handleOnSelect.bind(this);
   }
 
   componentDidMount() {
@@ -109,6 +110,14 @@ class Options extends React.Component {
     if (value && value.length > 2) {
       this.doSearch();
     }
+  }
+
+  handleOnSelect(val) {
+    console.log("handleOnSelect val: ", val);
+
+    this.setState({ search: val }, () => {
+      this.doSearch();
+    });
   }
 
   doSearch() {
@@ -334,18 +343,28 @@ class Options extends React.Component {
                 Search
               </label>
               <div className="has-icon-right">
-                <AutoSuggestInput
-                  myInput={{
+                <AutoComplete
+                  inputProps={{
                     className: "form-input",
-                    type: "text",
                     placeholder: "Search...",
-                    value: this.state.search,
+                    type: "text",
                   }}
-                  onSuggestionClick={(suggestion) =>
-                    this.handleSearch(suggestion)
-                  }
-                  myOnChange={(e) => this.handleSearch(e.target.value)}
-                  breeds={this.state.breeds}
+                  getItemValue={(item) => item.name}
+                  items={this.state.breeds}
+                  renderItem={(item, isHighlighted) => (
+                    <div
+                      style={{
+                        background: isHighlighted ? "lightgray" : "white",
+                      }}
+                    >
+                      {item.name}
+                    </div>
+                  )}
+                  value={this.state.search}
+                  onChange={(e) => this.handleSearch(e.target.value)}
+                  onSelect={(val) => {
+                    this.handleOnSelect(val);
+                  }}
                 />
                 {/*
                       <DebounceInput

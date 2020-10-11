@@ -95,7 +95,9 @@ class Tile extends React.Component {
             </div>
             <div className="card-body">
               <div className="card-subtitle">
-                <div className="h5 card-alt">{`${this.props.data.alt_names}`}</div>
+                <div className="h5 card-alt">{`${
+                  this.props.data.alt_names ? this.props.data.alt_names : ""
+                }`}</div>
               </div>
               <div className="card-subtitle text-gray">{temperaments}</div>
               <div className="card-description">
