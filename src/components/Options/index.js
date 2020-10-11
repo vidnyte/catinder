@@ -109,10 +109,21 @@ class Options extends React.Component {
     this.handleFavoriteBreed = this.handleFavoriteBreed.bind(this);
     this.handleOnSelect = this.handleOnSelect.bind(this);
     this.handleRemoveTemperament = this.handleRemoveTemperament.bind(this);
+    this.handleRandom = this.handleRandom.bind(this);
   }
 
   componentDidMount() {
     this.setup();
+  }
+
+  handleRandom() {
+    const randomInt = Math.floor(Math.random() * this.state.breedsTotal);
+
+    console.log("this.state.breeds: ", this.state.breeds);
+    console.log("randomInt: ", randomInt);
+    console.log("this.state.breeds[randomInt]: ", this.state.breeds[randomInt]);
+
+    this.setState({ results: [this.state.breeds[randomInt]], pageCount: 0 });
   }
 
   setup() {
@@ -185,12 +196,21 @@ class Options extends React.Component {
   }
 
   filterBreeds() {
-    console.log("STEP 1 this.state.breeds: ", this.state.breeds);
+    console.log("STEP 0 this.state.breeds: ", this.state.breeds);
 
     if (this.state.breeds) {
-      const breeds = this.state.breeds.filter((breed) => {
-        return this.state.origin === breed.origin;
+      const breeds0 = this.state.breeds.filter((breed) => {
+        return this.state.search.includes(breed.name);
       });
+
+      console.log("STEP 1 breeds0: ", breeds0);
+
+      let breeds = breeds0;
+      if (this.state.origin) {
+        breeds = breeds0.filter((breed) => {
+          return this.state.origin === breed.origin;
+        });
+      }
 
       console.log("STEP 2 breeds: ", breeds);
 
@@ -469,6 +489,14 @@ class Options extends React.Component {
       color: "#ff072a",
     };
 
+    const mainInputStyle = {
+      width: "100%",
+    };
+
+    const mainInputWrapperStyle = {
+      display: "block",
+    };
+
     return (
       <Fade bottom cascade>
         <div className="row options-wrapper">
@@ -476,6 +504,7 @@ class Options extends React.Component {
             <div
               className="tooltip cursorPointer"
               data-tooltip="Click me for a random breed!"
+              onClick={this.handleRandom}
             >
               <GiWhiteCat style={tabIconStyleLogo} />
             </div>
@@ -491,11 +520,14 @@ class Options extends React.Component {
                     className: "form-input",
                     placeholder: "Search...",
                     type: "text",
+                    style: mainInputStyle,
                   }}
+                  wrapperStyle={mainInputWrapperStyle}
                   getItemValue={(item) => item.name}
                   items={this.state.breeds}
                   renderItem={(item, isHighlighted) => (
                     <div
+                      key={item.id}
                       style={{
                         background: isHighlighted ? "lightgray" : "white",
                       }}
@@ -561,23 +593,25 @@ class Options extends React.Component {
           )}
           <div className="col-12">
             <div className="panel-footer">
-              <ReactPaginate
-                previousLabel={lang.pagination.previous}
-                nextLabel={lang.pagination.next}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={this.state.pageCount}
-                forcePage={this.state.page}
-                marginPagesDisplayed={this.state.neighgbours}
-                pageRangeDisplayed={this.state.pageRange}
-                onPageChange={this.handlePageClick}
-                initialPage={this.state.page}
-                containerClassName={"pagination justify-content-center"}
-                pageClassName={"page-item"}
-                activeClassName={"page-item active"}
-                previousClassName={"page-item"}
-                nextClassName={"page-item"}
-              />
+              {this.state.results && this.state.results.length > 1 && (
+                <ReactPaginate
+                  previousLabel={lang.pagination.previous}
+                  nextLabel={lang.pagination.next}
+                  breakLabel={"..."}
+                  breakClassName={"break-me"}
+                  pageCount={this.state.pageCount}
+                  forcePage={this.state.page}
+                  marginPagesDisplayed={this.state.neighgbours}
+                  pageRangeDisplayed={this.state.pageRange}
+                  onPageChange={this.handlePageClick}
+                  initialPage={this.state.page}
+                  containerClassName={"pagination justify-content-center"}
+                  pageClassName={"page-item"}
+                  activeClassName={"page-item active"}
+                  previousClassName={"page-item"}
+                  nextClassName={"page-item"}
+                />
+              )}
             </div>
           </div>
         </div>
