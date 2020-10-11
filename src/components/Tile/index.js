@@ -70,11 +70,15 @@ class Tile extends React.Component {
       <div className="col-12 col-sm-6 col-md-4">
         <Zoom duration={250}>
           <div className="card">
-            <div className="card-image" onClick={() => this.newImage()}>
+            <div
+              className="card-image tooltip"
+              data-tooltip="Click me for more cute kittens!"
+              onClick={() => this.newImage()}
+            >
               {this.state.imageUrl ? (
                 <img
                   src={this.state.imageUrl}
-                  className="breed-image tooltip"
+                  className="breed-image"
                   data-tooltip="Click me for more cute kittens!"
                 />
               ) : (

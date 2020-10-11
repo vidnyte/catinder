@@ -1,7 +1,8 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
 import { DebounceInput } from "react-debounce-input";
-import { MdFavorite, MdImage, MdPets } from "react-icons/md";
+import { MdFavorite, MdPets } from "react-icons/md";
+import { GiWhiteCat, GiNestedHearts } from "react-icons/gi";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
 import AutoSuggestInput from "./../AutoSuggestInput";
@@ -32,13 +33,6 @@ if (!favoriteBreeds) {
   favoriteBreeds = [];
 }
 
-let favoriteImages = JSON.parse(localStorage.getItem("favoriteImages"));
-
-if (!favoriteImages) {
-  localStorage.setItem("favoriteImages", JSON.stringify([]));
-  favoriteImages = [];
-}
-
 class Options extends React.Component {
   constructor(props) {
     super(props);
@@ -59,13 +53,11 @@ class Options extends React.Component {
       loadingResults: false,
       view,
       favoriteBreeds,
-      favoriteImages,
     };
 
     this.setup = this.setup.bind(this);
     this.addFavoriteBreed = this.addFavoriteBreed.bind(this);
     this.removeFavoriteBreed = this.removeFavoriteBreed.bind(this);
-    this.addFavoriteImage = this.addFavoriteImage.bind(this);
     this.handleBreed = this.handleBreed.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
@@ -73,7 +65,6 @@ class Options extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.renderBreeds = this.renderBreeds.bind(this);
-    this.renderImages = this.renderImages.bind(this);
     this.renderFavorites = this.renderFavorites.bind(this);
     this.handleFavoriteBreed = this.handleFavoriteBreed.bind(this);
   }
@@ -325,9 +316,19 @@ class Options extends React.Component {
       });
     }
 
+    const tabIconStyleLogo = {
+      marginRight: "0.4rem",
+      height: "3rem",
+      width: "3rem",
+      color: "#ff072a",
+    };
+
     return (
       <Fade bottom>
         <div className="row options-wrapper">
+          <div className="col-12">
+            <GiWhiteCat style={tabIconStyleLogo} />
+          </div>
           <div className="col-6">
             <div className="form-group">
               <label className="form-label" htmlFor="input-search">
@@ -430,16 +431,6 @@ class Options extends React.Component {
     );
   }
 
-  renderImages() {
-    return (
-      <Fade bottom>
-        <div className="row options-wrapper">
-          <div className="col-6"></div>
-        </div>
-      </Fade>
-    );
-  }
-
   renderFavorites() {
     const tiles = [];
 
@@ -458,18 +449,20 @@ class Options extends React.Component {
 
     console.log("tiles: ", tiles);
 
+    const tabIconStyleLogo = {
+      marginRight: "0.4rem",
+      height: "3rem",
+      width: "3rem",
+      color: "#ff072a",
+    };
+
     return (
       <Fade bottom>
         <div className="row options-wrapper">
           <div className="col-12">
-            <h2>Breeds</h2>
+            <GiNestedHearts style={tabIconStyleLogo} />
           </div>
           {tiles}
-        </div>
-        <div className="row options-wrapper">
-          <div className="col-12">
-            <h2>Images</h2>
-          </div>
         </div>
       </Fade>
     );
@@ -491,36 +484,13 @@ class Options extends React.Component {
             }}
           >
             <a href="#">
-              {" "}
               <MdPets
                 style={tabIconStyle}
                 className={
-                  this.state.view === "favorites"
-                    ? "tab-item active"
-                    : "tab-item"
+                  this.state.view === "breeds" ? "tab-item active" : "tab-item"
                 }
               />
               {lang.tabs.breeds}
-            </a>
-          </li>
-          <li
-            className={
-              this.state.view === "images" ? "tab-item active" : "tab-item"
-            }
-            onClick={() => {
-              this.handleViewClick("images");
-            }}
-          >
-            <a href="#">
-              <MdImage
-                style={tabIconStyle}
-                className={
-                  this.state.view === "favorites"
-                    ? "tab-item active"
-                    : "tab-item"
-                }
-              />
-              {lang.tabs.images}
             </a>
           </li>
           <li
@@ -547,8 +517,6 @@ class Options extends React.Component {
         <div className="container">
           {this.state.view === "breeds"
             ? this.renderBreeds()
-            : this.state.view === "images"
-            ? this.renderImages
             : this.renderFavorites()}
         </div>
       </>

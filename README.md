@@ -2,7 +2,7 @@
 
 ## Created by Erkka Virtanen ( vidnyte )
 
-This single-page-application showcases a fluid and responsive user interface for viewing different cat breeds and images. You can also save your favorite ones for later viewing!
+This single-page-application showcases a fluid and responsive user interface for viewing different cat breeds. You can also save your favorite ones for later viewing!
 
 Developed with the help of the following libraries and apis:
 
@@ -16,6 +16,8 @@ Developed with the help of the following libraries and apis:
 - React-localization
 - React-reveal
 - React-Paginate
+- Material Ui icons
+- Game Icons https://game-icons.net/
 
 ## Live Demo
 
