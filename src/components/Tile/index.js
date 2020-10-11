@@ -1,9 +1,14 @@
 import React from "react";
 import Zoom from "react-reveal/Zoom";
+import LocalizedStrings from "react-localization";
 import Loader from "react-loader-spinner";
 import { MdFavorite } from "react-icons/md";
 import { getBreedImage } from "./../../controllers/cat";
 import "./styles.css";
+
+import langFile from "./../../lang.json";
+
+const lang = new LocalizedStrings(langFile);
 
 class Tile extends React.Component {
   constructor(props) {
@@ -27,6 +32,13 @@ class Tile extends React.Component {
       .catch((e) => {
         console.log("error: ", e);
       });
+  }
+
+  componentDidUpdate(nextProps) {
+    if (this.props.language !== nextProps.language) {
+      lang.setLanguage(nextProps.language);
+      this.forceUpdate();
+    }
   }
 
   newImage() {
@@ -70,15 +82,11 @@ class Tile extends React.Component {
           <div className="card">
             <div
               className="card-image tooltip"
-              data-tooltip="Click me for more cute kittens!"
+              data-tooltip={lang.random.cuteKittens}
               onClick={() => this.newImage()}
             >
               {this.state.imageUrl ? (
-                <img
-                  src={this.state.imageUrl}
-                  className="breed-image"
-                  data-tooltip="Click me for more cute kittens!"
-                />
+                <img src={this.state.imageUrl} className="breed-image" />
               ) : (
                 <Loader
                   type="ThreeDots"
@@ -103,15 +111,15 @@ class Tile extends React.Component {
               </div>
               <div className="card-subtitle text-gray">
                 <span className="card-bold">
-                  Origin: {this.props.data.origin}
+                  {lang.tile.origin}: {this.props.data.origin}
                 </span>
                 <br />
                 <span className="card-bold">
-                  Life span: {this.props.data.life_span} years
+                  {lang.tile.lifeSpan}: {this.props.data.life_span} years
                 </span>
                 <br />
                 <span className="card-bold">
-                  Adaptability: {this.props.data.adaptability} / 5
+                  {lang.tile.adaptability}: {this.props.data.adaptability} / 5
                 </span>
               </div>
             </div>
@@ -134,8 +142,8 @@ class Tile extends React.Component {
                 onClick={() => this.props.handleFavoriteClick(this.props.data)}
               >
                 {this.props.favorited
-                  ? "Remove from Favorites"
-                  : "Add to Favorites"}
+                  ? lang.tile.removeFromFavorites
+                  : lang.tile.addToFavorites}
               </button>
             </div>
           </div>

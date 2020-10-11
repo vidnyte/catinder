@@ -111,6 +111,8 @@ class Options extends React.Component {
     this.handleOnSelect = this.handleOnSelect.bind(this);
     this.handleRemoveTemperament = this.handleRemoveTemperament.bind(this);
     this.handleRandom = this.handleRandom.bind(this);
+
+    lang.setLanguage(props.language);
   }
 
   componentDidMount() {
@@ -138,6 +140,12 @@ class Options extends React.Component {
         console.log("getBreedsTotal error: ", e);
         this.setState({ error: true, errorMessage: e.message });
       });
+  }
+
+  componentDidUpdate(nextProps) {
+    if (this.props.language !== nextProps.language) {
+      lang.setLanguage(nextProps.language);
+    }
   }
 
   setup() {
@@ -360,7 +368,7 @@ class Options extends React.Component {
   renderBreeds() {
     const originOptions = [
       <option key="origin-option" value="" defaultValue disabled>
-        Choose origin
+        {lang.inputs.chooseOrigin}
       </option>,
     ];
 
@@ -374,7 +382,7 @@ class Options extends React.Component {
 
     const temperamentOptions = [
       <option key="temperament-option" value={[]} defaultValue disabled>
-        Add a Temperament Filter
+        {lang.inputs.addTemperamentFilter}
       </option>,
     ];
 
@@ -440,6 +448,7 @@ class Options extends React.Component {
             handleFavoriteClick={this.handleFavoriteBreed}
             imageUrl={data.url}
             data={data}
+            language={this.props.language}
           />
         );
       });
@@ -479,7 +488,7 @@ class Options extends React.Component {
           <div className="col-12">
             <div
               className="tooltip cursorPointer"
-              data-tooltip="Click me for a random breed!"
+              data-tooltip={`${lang.random.clickMe}`}
               onClick={this.handleRandom}
             >
               <GiWhiteCat style={tabIconStyleLogo} />
@@ -488,13 +497,13 @@ class Options extends React.Component {
           <div className="col-sm-12 col-md-6">
             <div className="form-group">
               <label className="form-label" htmlFor="input-search">
-                Search
+                {lang.search.search}
               </label>
               <div className="has-icon-right">
                 <AutoComplete
                   inputProps={{
                     className: "form-input",
-                    placeholder: "Search...",
+                    placeholder: `${lang.search.search}...`,
                     type: "text",
                     style: mainInputStyle,
                   }}
@@ -634,6 +643,7 @@ class Options extends React.Component {
             handleFavoriteClick={this.handleFavoriteBreed}
             imageUrl={data.url}
             data={data}
+            language={this.props.language}
           />
         );
       });

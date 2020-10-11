@@ -3,53 +3,74 @@
     "header": {
       "github": "github"
     },
-    "search": { "origin": "Origin", "temperament": "Temperament" },
-    "options": {
-      "success": "Post sent succesfully",
-      "thanks": "Thank you for your message",
-      "couldNotLoadForm": "Could not load form",
-      "tryRefreshing": "Please try refreshing the page"
+    "search": {
+      "search": "Search",
+      "origin": "Origin",
+      "temperament": "Temperament"
     },
-    "results": {
+    "tile": {
+      "origin": "Origin",
+      "lifeSpan": "Life span",
+      "adaptability": "Adaptability",
+      "addToFavorites": "Add to Favorites",
+      "removeFromFavorites": "Remove from Favorites"
+    },
+    "footer": {
       "copyright": "All rights reserved"
+    },
+    "random": {
+      "clickMe": "Click me for a random breed!",
+      "cuteKittens": "Click me for more cute cats!"
     },
     "favorites": {
       "noFavoritesYet": "No Favorites Yet!"
     },
+    "inputs": {
+      "chooseOrigin": "Choose origin",
+      "addTemperamentFilter": "Add a TemperemantFilter"
+    },
     "pagination": {
       "next": "Next",
-      "Previous": "Previous"
+      "previous": "Previous"
     },
     "tabs": {
       "breeds": "Breeds",
-      "images": "Images",
       "favorites": "Favorites"
     }
   },
-  "fi": {
+  "ca": {
     "header": {
       "github": "github"
     },
-    "options": {
-      "success": "Post sent succesfully",
-      "thanks": "Thank you for your message",
-      "couldNotLoadForm": "Could not load form",
-      "tryRefreshing": "Please try refreshing the page"
+    "search": { "search": "Miau", "origin": "Meow", "temperament": "Moo" },
+    "footer": {
+      "copyright": "Mmmm Me Meew"
+    },
+    "random": {
+      "clickMe": "Meow meouw!",
+      "cuteKittens": "MEOW?!"
     },
     "favorites": {
-      "noFavoritesYet": "No Favorites Yet!"
+      "noFavoritesYet": "Mmm Mo Mo Mmm!"
     },
-    "results": {
-      "copyright": "All rights reserved"
+    "tile": {
+      "origin": "Mau",
+      "lifeSpan": "Mii",
+      "adaptability": "Meow",
+      "addToFavorites": "MEOW!",
+      "removeFromFavorites": "Mmmmeeooow?"
+    },
+    "inputs": {
+      "chooseOrigin": "Meuooouw",
+      "addTemperamentFilter": "Moow"
     },
     "pagination": {
-      "next": "Next",
-      "Previous": "Previous"
+      "next": "Mau",
+      "previous": "Mou"
     },
     "tabs": {
-      "breeds": "Breeds",
-      "images": "Images",
-      "favorites": "Favorites"
+      "breeds": "Mau",
+      "favorites": "Meouw!"
     }
   }
 }

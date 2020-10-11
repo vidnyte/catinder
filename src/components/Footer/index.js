@@ -1,32 +1,45 @@
 import React from "react";
-import "./styles.css";
+import LocalizedStrings from "react-localization";
 import Fade from "react-reveal/Fade";
+import langFile from "./../../lang.json";
+import "./styles.css";
 
 const GitHubPath =
   process.env.PUBLIC_URL + "/assets/images/github-logo-light.png";
 
-const tabIconStyleLogo = {
-  marginRight: "0.4rem",
-  height: "2.5rem",
-  width: "2.5rem",
-  color: "#ff072a",
-};
+const lang = new LocalizedStrings(langFile);
 
-function Footer() {
-  return (
-    <Fade bottom>
-      <footer className="footer-wrapper">
-        <a href="https://github.com/vidnyte/catinder" className="catinder-navi">
-          <img
-            src={GitHubPath}
-            className="logo-github"
-            alt="Catinder GitHub Repository"
-          />
-        </a>
-        <span>Copyright &#169; 2020 Catinder</span>
-      </footer>
-    </Fade>
-  );
+class Footer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    lang.setLanguage(props.language);
+  }
+
+  componentDidUpdate(nextProps) {
+    if (this.props.language !== nextProps.language) {
+      lang.setLanguage(nextProps.language);
+    }
+  }
+  render() {
+    return (
+      <Fade bottom>
+        <footer className="footer-wrapper">
+          <a
+            href="https://github.com/vidnyte/catinder"
+            className="catinder-navi"
+          >
+            <img
+              src={GitHubPath}
+              className="logo-github"
+              alt="Catinder GitHub Repository"
+            />
+          </a>
+          <span>{lang.footer.copyright} &#169; 2020 Catinder</span>
+        </footer>
+      </Fade>
+    );
+  }
 }
 
 export default Footer;

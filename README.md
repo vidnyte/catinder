@@ -2,11 +2,22 @@
 
 ## Created by Erkka Virtanen ( vidnyte )
 
-This single-page-application showcases a fluid and responsive user interface for viewing different cat breeds. You can also save your favorite ones for later viewing!
+Developed during one weekend.
+This single page React application showcases a fluid and responsive user interface for viewing different cat breeds. You can search for you favorite cat breed or filter breeds by their origin country and temperaments. After finding your favorites you can save them for later viewing!
 
-An Easter Egg! - Try clicking on the Red Lounging Cat to change the language! Meow!
+## Features
 
-Developed with the help of the following libraries and apis:
+- Responsive mobile friendly design
+- Multiple language support built-in
+- Random cat breed feature
+- Saving favorite breeds to browser's localStorage for later sessions
+- Fluid animations and snappy design
+
+## Easter Egg!
+
+- Clicking the Catinder logo TWO times to change the language! Meow!
+
+## Thanks to and developed with the help of the following libraries and APIs:
 
 - The Cat API
   https://thecatapi.com/
@@ -24,11 +35,28 @@ Developed with the help of the following libraries and apis:
 ## Live Demo
 
 A live demo is deployed on Heroku.
-https://catinder-app.herokuapp.com/
+
+- https://catinder-app.herokuapp.com/
+
+## To Do in the Future:
+
+- Refactor code and dependencies to remove warnings from console
+- Add tests
+- Check WAI-ARIA compliance
+- Research how to improve site performance and loading ( https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fcatinder-app.herokuapp.com%2F )
+- Add analytics(Google Analytics?)
+- Check and optimize SEO
 
 ## Available Scripts
 
-In the project directory, you can run:
+For local development add your own `.env` file to the root directory with your keys to The Cat API
+
+```
+REACT_APP_CAT_API_URL=https://api.thecatapi.com/v1
+REACT_APP_CAT_API_KEY=<YOUR-API-KEY-HERE>
+```
+
+Then in the project directory, you can run:
 
 ### `yarn start`
 
@@ -43,3 +71,7 @@ Launches the test runner in the interactive watch mode.<br />
 
 Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
+
+```
+
+```
