@@ -1,6 +1,7 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
 import { DebounceInput } from "react-debounce-input";
+import { MdFavorite, MdImage, MdPets } from "react-icons/md";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
 import AutoSuggestInput from "./../AutoSuggestInput";
@@ -474,6 +475,9 @@ class Options extends React.Component {
   }
 
   render() {
+    const tabIconStyle = {
+      marginRight: "0.4rem",
+    };
     return (
       <>
         <ul className="tab tab-block">
@@ -485,7 +489,18 @@ class Options extends React.Component {
               this.handleViewClick("breeds");
             }}
           >
-            <a href="#">{lang.tabs.breeds}</a>
+            <a href="#">
+              {" "}
+              <MdPets
+                style={tabIconStyle}
+                className={
+                  this.state.view === "favorites"
+                    ? "tab-item active"
+                    : "tab-item"
+                }
+              />
+              {lang.tabs.breeds}
+            </a>
           </li>
           <li
             className={
@@ -495,7 +510,17 @@ class Options extends React.Component {
               this.handleViewClick("images");
             }}
           >
-            <a href="#">{lang.tabs.images}</a>
+            <a href="#">
+              <MdImage
+                style={tabIconStyle}
+                className={
+                  this.state.view === "favorites"
+                    ? "tab-item active"
+                    : "tab-item"
+                }
+              />
+              {lang.tabs.images}
+            </a>
           </li>
           <li
             className={
@@ -505,7 +530,17 @@ class Options extends React.Component {
               this.handleViewClick("favorites");
             }}
           >
-            <a href="#">{lang.tabs.favorites}</a>
+            <a href="#">
+              <MdFavorite
+                style={tabIconStyle}
+                className={
+                  this.state.view === "favorites"
+                    ? "tab-item active"
+                    : "tab-item"
+                }
+              />
+              {lang.tabs.favorites}
+            </a>
           </li>
         </ul>
         <div className="container">
