@@ -20,6 +20,11 @@
   margin-bottom: 1rem;
 }
 
+.card-alt {
+  color: #e2425f;
+  margin-bottom: 1rem;
+}
+
 .card-footer {
   display: flex;
   justify-content: center;

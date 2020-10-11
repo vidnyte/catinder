@@ -53,12 +53,12 @@ class Tile extends React.Component {
 
   render() {
     const temperaments = [];
-    const temperamentList = this.props.data.temperament.split(", ");
+    const temperamentList = this.props.data.temperament.split(",");
     temperamentList.map((temp) => {
       temperaments.push(
         <span
           key={`${this.props.data.name}_${temp}`}
-          style={{ background: "#3f3d56" }}
+          style={{ background: "#3f3d56", color: "#ffd4d4" }}
           className="chip"
         >
           {temp}
@@ -94,10 +94,10 @@ class Tile extends React.Component {
               <div className="card-title h3">{this.props.data.name}</div>
             </div>
             <div className="card-body">
-              <div className="card-subtitle text-gray">
-                {this.props.data.alt_names}
-                {temperaments}
+              <div className="card-subtitle">
+                <div className="h5 card-alt">{`${this.props.data.alt_names}`}</div>
               </div>
+              <div className="card-subtitle text-gray">{temperaments}</div>
               <div className="card-description">
                 {this.props.data.description}
               </div>
