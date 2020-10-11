@@ -180,6 +180,8 @@ class Options extends React.Component {
     console.log("value: ", value);
     this.setState({
       search: value,
+      origin: null,
+      temperaments: [],
     });
 
     if (value && value.length > 2) {
@@ -199,8 +201,18 @@ class Options extends React.Component {
     console.log("STEP 0 this.state.breeds: ", this.state.breeds);
 
     if (this.state.breeds) {
+      console.log("this.state.search: ", this.state.search);
       const breeds0 = this.state.breeds.filter((breed) => {
-        return !this.state.search.includes(breed.name);
+        console.log("breed.name: ", breed.name);
+        console.log(
+          "this.state.search.includes(breed.name): ",
+          this.state.search.includes(breed.name)
+        );
+        if (this.state.search.length > 2) {
+          return this.state.search.includes(breed.name);
+        } else {
+          return true;
+        }
       });
 
       console.log("STEP 1 breeds0: ", breeds0);
@@ -355,6 +367,7 @@ class Options extends React.Component {
       {
         origin: origin,
         page: 0,
+        search: "",
       },
       () => {
         this.doSearch();
@@ -373,6 +386,7 @@ class Options extends React.Component {
       {
         temperaments,
         page: 0,
+        search: "",
       },
       () => {
         this.doSearch();
@@ -496,6 +510,19 @@ class Options extends React.Component {
       display: "block",
     };
 
+    const myMenuStyle = {
+      borderRadius: "3px",
+      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.1)",
+      background: "rgba(255, 255, 255, 0.9)",
+      padding: "2px 0",
+      fontSize: "90%",
+      position: "fixed",
+      overflow: "auto",
+      top: "1%",
+      zIndex: 999999,
+      maxHeight: "50%", // TODO: don't cheat, let it flow to the bottom
+    };
+
     return (
       <Fade bottom cascade>
         <div className="row options-wrapper">
@@ -524,12 +551,16 @@ class Options extends React.Component {
                   wrapperStyle={mainInputWrapperStyle}
                   getItemValue={(item) => item.name}
                   items={this.state.breeds}
+                  menuStyle={myMenuStyle}
                   renderItem={(item, isHighlighted) => (
                     <div
                       key={item.id}
                       style={{
                         background: isHighlighted ? "lightgray" : "white",
+                        position: "relative",
+                        zIndex: 1000,
                       }}
+                      className="form-input"
                     >
                       {item.name}
                     </div>
