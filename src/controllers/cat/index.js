@@ -42,7 +42,6 @@ export const getBreedImage = (breed_ids) => {
         params: { page: 0, limit: 1, breed_ids },
       })
       .then((response) => {
-        console.log("getBreedImage response.data: ", response.data);
         if (response.data) {
           resolve(response.data);
         } else {

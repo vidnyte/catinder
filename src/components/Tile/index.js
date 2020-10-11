@@ -20,7 +20,6 @@ class Tile extends React.Component {
   componentDidMount() {
     getBreedImage()
       .then((data) => {
-        console.log("data: ", data);
         this.setState({
           imageUrl: data[0].url,
         });

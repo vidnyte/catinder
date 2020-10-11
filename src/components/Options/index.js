@@ -75,6 +75,7 @@ class Options extends React.Component {
       origin: null,
       temperamentsList: TEMPERAMENT_LIST,
       temperaments: [],
+      breedsTotal: 0,
     };
 
     this.setup = this.setup.bind(this);
@@ -99,12 +100,39 @@ class Options extends React.Component {
 
   setup() {
     getBreeds()
-      .then((breeds) => {
-        console.log("getBreeds: ", breeds);
-        this.setState({ breeds });
+      .then((data) => {
+        console.log("GOT DATA: ", data);
+        console.log("DATA.length: ", data.length);
+        this.setState({ breedsTotal: data.length }, () => {
+          this.setState({ loadingResults: true }, () => {
+            getBreeds(this.state.page, this.state.limit)
+              .then((breeds) => {
+                console.log("getBreeds: ", breeds);
+                console.log("breedsTotal: ", this.state.breedsTotal);
+                console.log("breedsTotal: ", this.state.breedsTotal);
+                this.setState(
+                  {
+                    results: breeds,
+                    loadingResults: false,
+                    pageCount: Math.ceil(
+                      this.state.breedsTotal / this.state.limit
+                    ),
+                  },
+                  () => {
+                    console.log("PAGE COUNT: ", this.state.pageCount);
+                  }
+                );
+              })
+              .catch((e) => {
+                console.log("getBreeds error: ", e);
+                this.setState({ error: true, errorMessage: e.message });
+              });
+          });
+        });
       })
+
       .catch((e) => {
-        console.log("getBreeds error: ", e);
+        console.log("getBreedsTotal error: ", e);
         this.setState({ error: true, errorMessage: e.message });
       });
   }
@@ -156,7 +184,6 @@ class Options extends React.Component {
       const breeds2 = breeds.filter((breed) => {
         console.log("breed: ", breed);
         const temps = breed.temperament.split(", ");
-        console.log("temps: ", temps);
         console.log(
           "this.state.temperamentList: ",
           this.state.temperamentsList
@@ -181,10 +208,12 @@ class Options extends React.Component {
   doSearch() {
     const results = this.filterBreeds();
 
+    console.log("doSearch RESULTS: ", results);
+
     this.setState({
       results,
       loadingResults: false,
-      pageCount: Math.ceil(results.length / 5),
+      pageCount: Math.ceil(results.length / this.state.limit),
     });
   }
 
@@ -303,7 +332,28 @@ class Options extends React.Component {
         page: page.selected,
       },
       () => {
-        this.doSearch();
+        this.setState({ loadingResults: true }, () => {
+          getBreeds(this.state.page, this.state.limit)
+            .then((breeds) => {
+              console.log("getBreeds: ", breeds);
+              this.setState(
+                {
+                  results: breeds,
+                  loadingResults: false,
+                  pageCount: Math.ceil(
+                    this.state.breedsTotal / this.state.limit
+                  ),
+                },
+                () => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              );
+            })
+            .catch((e) => {
+              console.log("getBreeds error: ", e);
+              this.setState({ error: true, errorMessage: e.message });
+            });
+        });
       }
     );
   }
