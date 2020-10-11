@@ -4,6 +4,8 @@
 
 This single-page-application showcases a fluid and responsive user interface for viewing different cat breeds. You can also save your favorite ones for later viewing!
 
+An Easter Egg! - Try clicking on the Red Lounging Cat to change the language! Meow!
+
 Developed with the help of the following libraries and apis:
 
 - The Cat API

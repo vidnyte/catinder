@@ -311,17 +311,22 @@ class Options extends React.Component {
     }
 
     const tabIconStyleLogo = {
-      marginRight: "0.4rem",
       height: "3rem",
       width: "3rem",
+      marginBottom: "2rem",
       color: "#ff072a",
     };
 
     return (
-      <Fade bottom>
+      <Fade bottom cascade>
         <div className="row options-wrapper">
           <div className="col-12">
-            <GiWhiteCat style={tabIconStyleLogo} />
+            <div
+              className="tooltip cursorPointer"
+              data-tooltip="Click me for a random breed!"
+            >
+              <GiWhiteCat style={tabIconStyleLogo} />
+            </div>
           </div>
           <div className="col-sm-12 col-md-6">
             <div className="form-group">
@@ -444,14 +449,14 @@ class Options extends React.Component {
     console.log("tiles: ", tiles);
 
     const tabIconStyleLogo = {
-      marginRight: "0.4rem",
       height: "3rem",
       width: "3rem",
       color: "#ff072a",
+      marginBottom: "2rem",
     };
 
     return (
-      <Fade bottom>
+      <Fade cascade>
         <div className="row options-wrapper">
           <div className="col-12">
             <GiNestedHearts style={tabIconStyleLogo} />
