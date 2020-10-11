@@ -6,3 +6,11 @@
 .cursorPointer {
   cursor: pointer;
 }
+
+.temperaments-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin: 0.5rem;
+}

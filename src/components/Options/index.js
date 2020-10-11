@@ -1,18 +1,14 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
 import { DebounceInput } from "react-debounce-input";
-import { MdFavorite, MdPets } from "react-icons/md";
+import { MdFavorite, MdPets, MdCancel } from "react-icons/md";
 import { GiWhiteCat, GiNestedHearts } from "react-icons/gi";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
 import AutoComplete from "react-autocomplete";
 import Tile from "./../Tile";
 import Loading from "./../Loading";
-import {
-  searchBreeds,
-  getBreeds,
-  getCategories,
-} from "./../../controllers/cat";
+import { getBreeds } from "./../../controllers/cat";
 import "./styles.css";
 
 import langFile from "./../../lang.json";
@@ -33,6 +29,30 @@ if (!favoriteBreeds) {
   favoriteBreeds = [];
 }
 
+const TEMPERAMENT_LIST = [
+  "Affectionate",
+  "Agile",
+  "Clever",
+  "Demanding",
+  "Easy Going",
+  "Gentle",
+  "Curious",
+  "Intelligent",
+  "Interactive",
+  "Loyal",
+  "Lively",
+  "Mischievous",
+  "Playful",
+  "Quiet",
+  "Social",
+  "Sedate",
+  "Sensible",
+  "Sweet",
+  "Tenacious",
+];
+
+const ORIGIN_LIST = ["United States", "Greece", "United Kingdom"];
+
 class Options extends React.Component {
   constructor(props) {
     super(props);
@@ -45,21 +65,23 @@ class Options extends React.Component {
       pageRange: 5,
       breedId: "",
       breeds: [],
-      categoryIds: [],
-      categories: [],
       error: false,
       errorMessage: "",
       results: [],
       loadingResults: false,
       view,
       favoriteBreeds,
+      originList: ORIGIN_LIST,
+      origin: null,
+      temperamentsList: TEMPERAMENT_LIST,
+      temperaments: [],
     };
 
     this.setup = this.setup.bind(this);
     this.addFavoriteBreed = this.addFavoriteBreed.bind(this);
     this.removeFavoriteBreed = this.removeFavoriteBreed.bind(this);
-    this.handleBreed = this.handleBreed.bind(this);
-    this.handleCategory = this.handleCategory.bind(this);
+    this.handleOrigin = this.handleOrigin.bind(this);
+    this.handleTemperament = this.handleTemperament.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
     this.handleViewClick = this.handleViewClick.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -68,6 +90,7 @@ class Options extends React.Component {
     this.renderFavorites = this.renderFavorites.bind(this);
     this.handleFavoriteBreed = this.handleFavoriteBreed.bind(this);
     this.handleOnSelect = this.handleOnSelect.bind(this);
+    this.handleRemoveTemperament = this.handleRemoveTemperament.bind(this);
   }
 
   componentDidMount() {
@@ -84,16 +107,16 @@ class Options extends React.Component {
         console.log("getBreeds error: ", e);
         this.setState({ error: true, errorMessage: e.message });
       });
+  }
 
-    getCategories()
-      .then((categories) => {
-        console.log("getCategories res: ", categories);
-        this.setState({ categories });
-      })
-      .catch((e) => {
-        console.log("getCategories error: ", e);
-        this.setState({ error: true, errorMessage: e.message });
-      });
+  handleRemoveTemperament(temperament) {
+    const temps = this.state.temperaments.filter((breed) => {
+      return breed !== temperament;
+    });
+
+    this.setState({ temperaments: temps }, () => {
+      this.doSearch();
+    });
   }
 
   handleViewClick(view) {
@@ -120,31 +143,49 @@ class Options extends React.Component {
     });
   }
 
+  filterBreeds() {
+    console.log("STEP 1 this.state.breeds: ", this.state.breeds);
+
+    if (this.state.breeds) {
+      const breeds = this.state.breeds.filter((breed) => {
+        return this.state.origin !== breed.origin;
+      });
+
+      console.log("STEP 2 breeds: ", breeds);
+
+      const breeds2 = breeds.filter((breed) => {
+        console.log("breed: ", breed);
+        const temps = breed.temperament.split(", ");
+        console.log("temps: ", temps);
+        console.log(
+          "this.state.temperamentList: ",
+          this.state.temperamentsList
+        );
+        temps.forEach((temp) => {
+          if (this.state.temperaments.includes(temp)) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      });
+
+      console.log("STEP 3 breeds2: ", breeds2);
+
+      return breeds2;
+    } else {
+      return [];
+    }
+  }
+
   doSearch() {
-    this.setState(
-      {
-        loadingResults: true,
-      },
-      () => {
-        searchBreeds(this.state.search)
-          .then((results) => {
-            console.log("doSearch results: ", results);
-            this.setState({
-              results,
-              loadingResults: false,
-              pageCount: Math.ceil(results.length / 5),
-            });
-          })
-          .catch((e) => {
-            console.log("error: ", e);
-            this.setState({
-              loadingResults: false,
-              error: true,
-              errorMessage: e.message,
-            });
-          });
-      }
-    );
+    const results = this.filterBreeds();
+
+    this.setState({
+      results,
+      loadingResults: false,
+      pageCount: Math.ceil(results.length / 5),
+    });
   }
 
   handleFavoriteBreed(breed) {
@@ -225,12 +266,12 @@ class Options extends React.Component {
     );
   }
 
-  handleBreed(breed) {
-    console.log("breed clicked: ", breed);
+  handleOrigin(origin) {
+    console.log("origin clicked: ", origin);
 
     this.setState(
       {
-        breedId: breed.id,
+        origin: origin,
       },
       () => {
         this.doSearch();
@@ -238,16 +279,16 @@ class Options extends React.Component {
     );
   }
 
-  handleCategory(category) {
-    console.log("category clicked: ", category);
+  handleTemperament(temperament) {
+    console.log("temperament clicked: ", temperament);
 
-    const categoryIdList = this.state.categoryIds;
+    const temperaments = this.state.temperaments;
 
-    categoryIdList.push(category.id);
+    temperaments.push(temperament);
 
     this.setState(
       {
-        categoryIds: categoryIdList,
+        temperaments,
       },
       () => {
         this.doSearch();
@@ -268,37 +309,73 @@ class Options extends React.Component {
   }
 
   renderBreeds() {
-    const breedOptions = [
-      <option key="breed-option" disabled>
-        Choose an option
+    const originOptions = [
+      <option key="origin-option" disabled>
+        Choose origin
       </option>,
     ];
 
-    if (this.state.breeds) {
-      this.state.breeds.map((breed) => {
-        breedOptions.push(
-          <option key={breed.id} data-breed={breed}>
-            {breed.name}
-          </option>
+    this.state.originList.map((origin) => {
+      originOptions.push(
+        <option key={origin.id} data-origin={origin}>
+          {origin}
+        </option>
+      );
+    });
+
+    const temperamentOptions = [
+      <option key="temperament-option" disabled>
+        Add a Temperament Filter
+      </option>,
+    ];
+
+    this.state.temperamentsList.map((temperament, index) => {
+      temperamentOptions.push(
+        <option key={`${temperament}_${index}`} data-temperament={temperament}>
+          {temperament}
+        </option>
+      );
+    });
+
+    const temperamentChips = [];
+
+    if (this.state.temperaments) {
+      this.state.temperaments.map((temperament, index) => {
+        temperamentChips.push(
+          <span
+            key={`${temperament}_${index}`}
+            className="chip"
+            data-temperament={temperament}
+            style={{
+              background: "#3f3d56",
+              color: "#ffd4d4",
+              margin: "0.3rem",
+            }}
+          >
+            {temperament}
+            <MdCancel
+              style={{
+                color: "#ffd4d4",
+                width: "1rem",
+                height: "1rem",
+                cursor: "pointer",
+                margin: "0.3rem",
+                marginRight: "0.05rem",
+              }}
+              onClick={() => this.handleRemoveTemperament(temperament)}
+            />
+          </span>
         );
       });
     }
 
-    const categoryOptions = [
-      <option key="category-option" disabled>
-        Choose an option
-      </option>,
-    ];
-
-    if (this.state.categories) {
-      this.state.categories.map((category) => {
-        categoryOptions.push(
-          <option key={category.id} data-category={category}>
-            {category.name}
-          </option>
-        );
-      });
-    }
+    this.state.temperamentsList.map((temperament) => {
+      temperamentOptions.push(
+        <option key={temperament} data-temperament={temperament}>
+          {temperament}
+        </option>
+      );
+    });
 
     const tiles = [];
 
@@ -366,50 +443,43 @@ class Options extends React.Component {
                     this.handleOnSelect(val);
                   }}
                 />
-                {/*
-                      <DebounceInput
-                      className="form-input"
-                      type="text"
-                      placeholder="Search..."
-                      value={this.state.search}
-                      minLength={2}
-                      debounceTimeout={300}
-                      onChange={this.handleSearch}
-                    />*/}
-
                 <i className="form-icon icon icon-search" />
               </div>
             </div>
           </div>
           <div className="col-sm-12 col-md-3">
             <div className="form-group">
-              <label className="form-label" htmlFor="input-breed">
-                Breed
+              <label className="form-label" htmlFor="input-origin">
+                {lang.search.origin}
               </label>
               <div className="form-group">
                 <select
                   className="form-select"
-                  id="input-breed"
-                  onChange={(event) => this.handleBreed(event.target.value)}
+                  id="input-origin"
+                  onChange={(event) => this.handleOrigin(event.target.value)}
                 >
-                  {breedOptions}
+                  {originOptions}
                 </select>
               </div>
             </div>
           </div>
           <div className="col-sm-12 col-md-3">
             <div className="form-group">
-              <label className="form-label" htmlFor="input-category">
-                Category
+              <label className="form-label" htmlFor="input-temperament">
+                {lang.search.temperament}
               </label>
               <div className="form-group">
                 <select
                   className="form-select"
-                  id="input-category"
-                  onChange={(event) => this.handleCategory(event.target.value)}
+                  id="input-temperament"
+                  onChange={(event) =>
+                    this.handleTemperament(event.target.value)
+                  }
                 >
-                  {categoryOptions}
+                  {temperamentOptions}
                 </select>
+
+                <div className="temperaments-wrapper">{temperamentChips}</div>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@
     "header": {
       "github": "github"
     },
+    "search": { "origin": "Origin", "temperament": "Temperament" },
     "options": {
       "success": "Post sent succesfully",
       "thanks": "Thank you for your message",
