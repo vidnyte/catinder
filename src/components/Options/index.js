@@ -650,6 +650,13 @@ class Options extends React.Component {
           <div className="col-12">
             <GiNestedHearts style={tabIconStyleLogo} />
           </div>
+          {tiles && tiles.length > 0 ? (
+            tiles
+          ) : (
+            <div className="col-12">
+              <span className="h3">{lang.favorites.noFavoritesYet}</span>
+            </div>
+          )}
           {tiles}
         </div>
       </Fade>

@@ -13,6 +13,9 @@
     "results": {
       "copyright": "All rights reserved"
     },
+    "favorites": {
+      "noFavoritesYet": "No Favorites Yet!"
+    },
     "pagination": {
       "next": "Next",
       "Previous": "Previous"
@@ -32,6 +35,9 @@
       "thanks": "Thank you for your message",
       "couldNotLoadForm": "Could not load form",
       "tryRefreshing": "Please try refreshing the page"
+    },
+    "favorites": {
+      "noFavoritesYet": "No Favorites Yet!"
     },
     "results": {
       "copyright": "All rights reserved"
