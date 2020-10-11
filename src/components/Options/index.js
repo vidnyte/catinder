@@ -190,7 +190,7 @@ class Options extends React.Component {
   handleOnSelect(val) {
     console.log("handleOnSelect val: ", val);
 
-    this.setState({ search: val }, () => {
+    this.setState({ search: val, origin: null, temperaments: [] }, () => {
       this.doSearch();
     });
   }
@@ -200,7 +200,7 @@ class Options extends React.Component {
 
     if (this.state.breeds) {
       const breeds0 = this.state.breeds.filter((breed) => {
-        return this.state.search.includes(breed.name);
+        return !this.state.search.includes(breed.name);
       });
 
       console.log("STEP 1 breeds0: ", breeds0);
@@ -246,8 +246,25 @@ class Options extends React.Component {
 
     console.log("doSearch RESULTS: ", results);
 
+    console.log("results.length: ", results.length);
+
+    console.log("this.state.page: ", this.state.page);
+
+    console.log(
+      "this.state.page + 1) * this.state.limit: ",
+      (this.state.page + 1) * this.state.limit
+    );
+
+    const res = results.slice(
+      this.state.page * this.state.limit,
+      (this.state.page + 1) * this.state.limit
+    );
+
+    console.log("RES XXX: ", res);
+
     this.setState({
-      results,
+      results: res,
+      breedsTotal: results.length,
       loadingResults: false,
       pageCount: Math.ceil(results.length / this.state.limit),
     });
@@ -337,6 +354,7 @@ class Options extends React.Component {
     this.setState(
       {
         origin: origin,
+        page: 0,
       },
       () => {
         this.doSearch();
@@ -354,6 +372,7 @@ class Options extends React.Component {
     this.setState(
       {
         temperaments,
+        page: 0,
       },
       () => {
         this.doSearch();
@@ -368,35 +387,15 @@ class Options extends React.Component {
         page: page.selected,
       },
       () => {
-        this.setState({ loadingResults: true }, () => {
-          getBreeds(this.state.page, this.state.limit)
-            .then((breeds) => {
-              console.log("getBreeds: ", breeds);
-              this.setState(
-                {
-                  results: breeds,
-                  loadingResults: false,
-                  pageCount: Math.ceil(
-                    this.state.breedsTotal / this.state.limit
-                  ),
-                },
-                () => {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }
-              );
-            })
-            .catch((e) => {
-              console.log("getBreeds error: ", e);
-              this.setState({ error: true, errorMessage: e.message });
-            });
-        });
+        this.doSearch();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     );
   }
 
   renderBreeds() {
     const originOptions = [
-      <option key="origin-option" selected disabled>
+      <option key="origin-option" value="null" selected disabled>
         Choose origin
       </option>,
     ];
@@ -410,7 +409,7 @@ class Options extends React.Component {
     });
 
     const temperamentOptions = [
-      <option key="temperament-option" selected disabled>
+      <option key="temperament-option" value={[]} selected disabled>
         Add a Temperament Filter
       </option>,
     ];
@@ -555,6 +554,7 @@ class Options extends React.Component {
                   className="form-select"
                   id="input-origin"
                   onChange={(event) => this.handleOrigin(event.target.value)}
+                  value={this.state.origin}
                 >
                   {originOptions}
                 </select>
