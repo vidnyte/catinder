@@ -67,7 +67,7 @@ class Tile extends React.Component {
     });
 
     return (
-      <div className="col-12 col-sm-6 col-md-4">
+      <div className="col-sm-12 col-md-4">
         <Zoom duration={250}>
           <div className="card">
             <div
@@ -125,7 +125,16 @@ class Tile extends React.Component {
                 }}
                 onClick={() => this.props.handleFavoriteClick(this.props.data)}
               />
-              <button className="btn btn-primary">Add to Favorites</button>
+              <button
+                className={
+                  this.props.favorited ? "btn btn-primary" : "btn btn-secondary"
+                }
+                onClick={() => this.props.handleFavoriteClick(this.props.data)}
+              >
+                {!this.props.favorited
+                  ? "Remove from Favorites"
+                  : "Add to Favorites"}
+              </button>
             </div>
           </div>
         </Zoom>

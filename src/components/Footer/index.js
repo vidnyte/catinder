@@ -1,9 +1,9 @@
 import React from "react";
 import "./styles.css";
 import Fade from "react-reveal/Fade";
-import { GiBlackCat, GiNestedHearts } from "react-icons/gi";
 
-const imagePath = process.env.PUBLIC_URL + "/assets/images/catinder-logo.svg";
+const GitHubPath =
+  process.env.PUBLIC_URL + "/assets/images/github-logo-light.png";
 
 const tabIconStyleLogo = {
   marginRight: "0.4rem",
@@ -16,9 +16,14 @@ function Footer() {
   return (
     <Fade bottom>
       <footer className="footer-wrapper">
-        <a href="https://github.com/vidnyte/catinder" className="footer-link">
-          <GiBlackCat style={tabIconStyleLogo} />
+        <a href="https://github.com/vidnyte/catinder" className="catinder-navi">
+          <img
+            src={GitHubPath}
+            className="logo-github"
+            alt="Catinder GitHub Repository"
+          />
         </a>
+        <span>Copyright &#169; 2020 Catinder</span>
       </footer>
     </Fade>
   );

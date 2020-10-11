@@ -1,19 +1,18 @@
 .logo-image {
-  height: 4rem;
+  height: auto;
+  max-height: 15rem;
+  width: 80%;
+  max-width: 15rem;
   padding: 0.5rem;
   margin: 1rem;
-  margin-right: 1.5rem;
   background: #3f3d56;
   border-radius: 34px;
 }
-.logo-github {
-  width: 2rem;
-  height: 2rem;
-  padding: 0.25rem;
-  margin: 0.5rem;
-  margin-left: 1.5rem;
-  background: #3f3d56;
-  border-radius: 34px;
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .catinder-logo {

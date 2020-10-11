@@ -153,22 +153,16 @@ class Options extends React.Component {
   }
 
   removeFavoriteBreed(breed) {
-    console.log("remove favorite breed: ", breed);
-    console.log("this.state.favoriteBreeds: ", this.state.favoriteBreeds);
-
-    const removeIndex = this.state.favoriteBreeds.findIndex((obj) => {
-      return obj.id === breed.id;
+    const breeds = this.state.favoriteBreeds.filter((obj) => {
+      return obj.id !== breed.id;
     });
-
-    const breeds = this.state.favoriteBreeds.splice(removeIndex, 1);
-
-    console.log("breeds: ", breeds);
 
     this.setState(
       {
         favoriteBreeds: breeds,
       },
       () => {
+        this.forceUpdate();
         localStorage.setItem(
           "favoriteBreeds",
           JSON.stringify(this.state.favoriteBreeds)
@@ -304,7 +298,7 @@ class Options extends React.Component {
         tiles.push(
           <Tile
             key={data.id}
-            favorited={this.state.favoriteBreeds.filter(
+            favorited={this.state.favoriteBreeds.findIndex(
               (breed) => breed.id === data.id
             )}
             breed={data.id}
@@ -329,7 +323,7 @@ class Options extends React.Component {
           <div className="col-12">
             <GiWhiteCat style={tabIconStyleLogo} />
           </div>
-          <div className="col-6">
+          <div className="col-sm-12 col-md-6">
             <div className="form-group">
               <label className="form-label" htmlFor="input-search">
                 Search
@@ -363,7 +357,7 @@ class Options extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-3">
+          <div className="col-sm-12 col-md-3">
             <div className="form-group">
               <label className="form-label" htmlFor="input-breed">
                 Breed
@@ -379,7 +373,7 @@ class Options extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-3">
+          <div className="col-sm-12 col-md-3">
             <div className="form-group">
               <label className="form-label" htmlFor="input-category">
                 Category
