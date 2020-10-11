@@ -36,8 +36,6 @@ class App extends React.Component {
 
   changeLanguage(langi) {
     this.setState({ language: langi }, () => {
-      console.log("this.state.language: ", this.state.language);
-
       lang.setLanguage(this.state.language);
       this.forceUpdate();
     });
