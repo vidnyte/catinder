@@ -117,13 +117,32 @@ class Options extends React.Component {
   }
 
   handleRandom() {
-    const randomInt = Math.floor(Math.random() * this.state.breedsTotal);
+    getBreeds()
+      .then((data) => {
+        this.setState({ breedsTotal: data.length, breeds: data }, () => {
+          const randomInt = Math.floor(Math.random() * this.state.breedsTotal);
 
-    console.log("this.state.breeds: ", this.state.breeds);
-    console.log("randomInt: ", randomInt);
-    console.log("this.state.breeds[randomInt]: ", this.state.breeds[randomInt]);
+          console.log("this.state.breeds: ", this.state.breeds);
+          console.log("randomInt: ", randomInt);
+          console.log(
+            "this.state.breeds[randomInt]: ",
+            this.state.breeds[randomInt]
+          );
 
-    this.setState({ results: [this.state.breeds[randomInt]], pageCount: 0 });
+          this.setState({
+            results: [this.state.breeds[randomInt]],
+            pageCount: 0,
+            page: 0,
+            origin: null,
+            temperaments: [],
+            search: "",
+          });
+        });
+      })
+      .catch((e) => {
+        console.log("getBreedsTotal error: ", e);
+        this.setState({ error: true, errorMessage: e.message });
+      });
   }
 
   setup() {
