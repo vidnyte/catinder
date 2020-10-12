@@ -8,6 +8,15 @@
   color: #333;
 }
 
+.card-bottom {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .breed-image {
   height: 15rem;
   object-fit: fill;
@@ -30,4 +39,8 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.bottom-margin {
+  margin-bottom: 2rem;
 }

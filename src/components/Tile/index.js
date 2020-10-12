@@ -77,8 +77,12 @@ class Tile extends React.Component {
       return null;
     });
 
+    const validAltName = this.props.data.alt_names
+      ? this.props.data.alt_names.trim()
+      : false;
+
     return (
-      <div className="col-sm-12 col-md-4">
+      <div className="col-sm-12 col-md-4 bottom-margin">
         <Zoom duration={250}>
           <div className="card">
             <div
@@ -105,11 +109,12 @@ class Tile extends React.Component {
               <div className="card-title h3">{this.props.data.name}</div>
             </div>
             <div className="card-body">
-              <div className="card-subtitle">
-                <div className="h5 card-alt">{`${
-                  this.props.data.alt_names ? this.props.data.alt_names : ""
-                }`}</div>
-              </div>
+              {validAltName && (
+                <div className="card-subtitle">
+                  <div className="h5 card-alt">{validAltName}</div>
+                </div>
+              )}
+
               <div className="card-subtitle text-gray">{temperaments}</div>
               <div className="card-description">
                 {this.props.data.description}
@@ -127,29 +132,34 @@ class Tile extends React.Component {
                   {lang.tile.adaptability}: {this.props.data.adaptability} / 5
                 </span>
               </div>
-            </div>
-            <div className="card-footer">
-              <MdFavorite
-                style={{
-                  color: this.props.favorited ? "#ff072a" : "rgb(63, 61, 86)",
-                  width: "3rem",
-                  height: "3rem",
-                  padding: "0.5rem",
-                }}
-                onClick={() => this.props.handleFavoriteClick(this.props.data)}
-              />
-              <button
-                className={
-                  !this.props.favorited
-                    ? "btn btn-primary"
-                    : "btn btn-secondary"
-                }
-                onClick={() => this.props.handleFavoriteClick(this.props.data)}
-              >
-                {this.props.favorited
-                  ? lang.tile.removeFromFavorites
-                  : lang.tile.addToFavorites}
-              </button>
+              <div className="card-bottom">
+                <MdFavorite
+                  style={{
+                    color: this.props.favorited ? "#ff072a" : "rgb(63, 61, 86)",
+                    width: "3.8rem",
+                    height: "3.8rem",
+                    padding: "0.5rem",
+                    marginBottom: "0.5rem",
+                  }}
+                  onClick={() =>
+                    this.props.handleFavoriteClick(this.props.data)
+                  }
+                />
+                <button
+                  className={
+                    !this.props.favorited
+                      ? "btn btn-primary"
+                      : "btn btn-secondary"
+                  }
+                  onClick={() =>
+                    this.props.handleFavoriteClick(this.props.data)
+                  }
+                >
+                  {this.props.favorited
+                    ? lang.tile.removeFromFavorites
+                    : lang.tile.addToFavorites}
+                </button>
+              </div>
             </div>
           </div>
         </Zoom>
