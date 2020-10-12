@@ -11,6 +11,7 @@
     "tile": {
       "origin": "Origin",
       "lifeSpan": "Life span",
+      "years": "years",
       "adaptability": "Adaptability",
       "addToFavorites": "Add to Favorites",
       "removeFromFavorites": "Remove from Favorites"
@@ -56,6 +57,7 @@
     "tile": {
       "origin": "Mau",
       "lifeSpan": "Mii",
+      "years": "Mou",
       "adaptability": "Meow",
       "addToFavorites": "MEOW!",
       "removeFromFavorites": "Mmmmeeooow?"

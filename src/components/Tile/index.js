@@ -115,7 +115,7 @@ class Tile extends React.Component {
                 </span>
                 <br />
                 <span className="card-bold">
-                  {lang.tile.lifeSpan}: {this.props.data.life_span} years
+                  {`${lang.tile.lifeSpan}: ${this.props.data.life_span} ${lang.tile.years}`}
                 </span>
                 <br />
                 <span className="card-bold">
