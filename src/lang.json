@@ -29,7 +29,7 @@
     },
     "inputs": {
       "chooseOrigin": "Choose origin",
-      "addTemperamentFilter": "Add Temperemant"
+      "addTemperamentFilter": "Add Temperament"
     },
     "pagination": {
       "next": "Next",

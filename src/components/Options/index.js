@@ -60,6 +60,7 @@ const ORIGIN_LIST = [
   "France",
   "Greece",
   "Japan",
+  "Norway",
   "Russia",
   "Somalia",
   "Singapore",
