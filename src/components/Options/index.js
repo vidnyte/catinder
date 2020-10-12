@@ -495,6 +495,25 @@ class Options extends React.Component {
       zIndex: 999999,
     };
 
+    const myMenuStyleNotFound = {
+      borderRadius: "3px",
+      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.1)",
+      background: "rgba(255, 255, 255, 0.9)",
+      padding: "2px 0",
+      fontSize: "90%",
+      position: "absolute",
+      top: "-2.5rem",
+      height: "4rem",
+      left: "1rem",
+      overflowY: "auto",
+      zIndex: 999999,
+    };
+
+    const filtered = this.state.breeds.filter((breed) => {
+      const regex = new RegExp(`${this.state.search.toLowerCase()}`, "i");
+      return regex.test(breed.name.toLowerCase());
+    });
+
     return (
       <Fade bottom cascade>
         <div className="row options-wrapper">
@@ -522,14 +541,19 @@ class Options extends React.Component {
                   }}
                   wrapperStyle={mainInputWrapperStyle}
                   getItemValue={(item) => item.name}
-                  items={this.state.breeds.filter((breed) => {
-                    const regex = new RegExp(
-                      `${this.state.search.toLowerCase()}`,
-                      "i"
+                  items={filtered}
+                  renderMenu={(items, value, style) => {
+                    return filtered && filtered.length > 0 ? (
+                      <div
+                        style={{ ...style, ...myMenuStyle }}
+                        children={items}
+                      />
+                    ) : (
+                      <div style={{ ...style, ...myMenuStyleNotFound }}>
+                        <span className="h4">{lang.search.noResultsFound}</span>
+                      </div>
                     );
-                    return regex.test(breed.name.toLowerCase());
-                  })}
-                  menuStyle={myMenuStyle}
+                  }}
                   renderItem={(item, isHighlighted) => (
                     <div
                       key={item.id}

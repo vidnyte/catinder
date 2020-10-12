@@ -6,7 +6,8 @@
     "search": {
       "search": "Search",
       "origin": "Origin",
-      "temperament": "Temperament"
+      "temperament": "Temperament",
+      "noResultsFound": "No results found"
     },
     "tile": {
       "origin": "Origin",
@@ -43,7 +44,12 @@
     "header": {
       "github": "github"
     },
-    "search": { "search": "Miau", "origin": "Meow", "temperament": "Moo" },
+    "search": {
+      "search": "Miau",
+      "origin": "Meow",
+      "temperament": "Moo",
+      "noResultsFound": "Meou meou meou..."
+    },
     "footer": {
       "copyright": "Mmmm Me Meew"
     },
