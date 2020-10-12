@@ -210,8 +210,9 @@ class Tile extends React.Component {
                     height: "3.8rem",
                     padding: "0.5rem",
                     marginBottom: "0.5rem",
+                    cursor: "pointer",
                   }}
-                  onClick={(e) => {
+                  onClick={() => {
                     this.props.handleFavoriteClick(this.props.data);
                   }}
                 />

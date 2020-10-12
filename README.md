@@ -4,12 +4,12 @@
 
 <img src="./public/assets/images/catinder-logo-alt.svg" alt="Catinder Logo by Undraw" width="200"/>
 
-Developed during one weekend.
+Developed during a weekend and half.
 This single page React application showcases a fluid and responsive user interface for viewing different cat breeds. You can search for you favorite cat breed or filter breeds by their origin country and temperaments. After finding your favorites you can save them for later viewing!
 
 ## Features
 
-- Responsive mobile friendly design
+- Responsive mobile friendly implementation
 - Multiple language support built-in
 - Random cat breed feature
 - Saving favorite breeds to browser's localStorage for later sessions
@@ -30,8 +30,8 @@ This single page React application showcases a fluid and responsive user interfa
   https://undraw.co/
 - React-localization
 - React-reveal
-- React-Paginate
-- Material Ui icons
+- React-paginate
+- Material UI icons
 - Game Icons
   https://game-icons.net/
 - Particle Effects by Louis Hoebregts
