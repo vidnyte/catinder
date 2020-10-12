@@ -21,6 +21,7 @@ class Tile extends React.Component {
       open: props.open || false,
       imageUrl: "",
       loadingImage: true,
+      showAnim: false,
     };
 
     this.open = this.open.bind(this);
@@ -48,16 +49,18 @@ class Tile extends React.Component {
       this.forceUpdate();
     }
   }
-  heartPop(e) {
-    const { target } = e;
-    const rect = target.getBoundingClientRect();
+  heartPop(target) {
+    if (this.state.showAnim) {
+      const rect = target.getBoundingClientRect();
 
-    const xCenter = (rect.right + rect.left) / 2;
-    const yCenter = (rect.top + rect.bottom) / 2;
+      const xCenter = (rect.right + rect.left) / 2;
+      const yCenter = (rect.top + rect.bottom) / 2;
 
-    for (let i = 0; i < 32; i++) {
-      this.createParticle(xCenter, yCenter);
+      for (let i = 0; i < 32; i++) {
+        this.createParticle(xCenter, yCenter);
+      }
     }
+    this.setState({ showAnim: true });
   }
 
   createParticle(x, y) {
@@ -83,9 +86,9 @@ class Tile extends React.Component {
         },
       ],
       {
-        duration: 900 + Math.random() * 1300,
+        duration: 900 + Math.random() * 1100,
         easing: "cubic-bezier(0, .9, .57, 1)",
-        delay: Math.random() * 500,
+        delay: Math.random() * 300,
       }
     );
 
@@ -94,15 +97,20 @@ class Tile extends React.Component {
     };
   }
 
-  newImage() {
+  newImage(e) {
     if (!this.state.loadingImage) {
       this.setState({ imageUrl: "" }, () => {
         getBreedImage(this.props.breed)
           .then((data) => {
-            this.setState({
-              imageUrl: data[0].url,
-              loadingImage: false,
-            });
+            this.setState(
+              {
+                imageUrl: data[0].url,
+                loadingImage: false,
+              },
+              () => {
+                //this.heartPop(xCenter, yCenter);
+              }
+            );
           })
           .catch((e) => {
             console.log("error: ", e);
@@ -145,8 +153,7 @@ class Tile extends React.Component {
               className="card-image tooltip"
               data-tooltip={lang.random.cuteKittens}
               onClick={(e) => {
-                this.heartPop(e);
-                this.newImage();
+                this.newImage(e);
               }}
             >
               {this.state.imageUrl ? (
@@ -154,6 +161,9 @@ class Tile extends React.Component {
                   src={this.state.imageUrl}
                   alt={this.props.data.name}
                   className="breed-image"
+                  onLoad={(e) => {
+                    this.heartPop(e.target);
+                  }}
                 />
               ) : (
                 <Loader
