@@ -10,16 +10,23 @@ import langFile from "./../../lang.json";
 
 const lang = new LocalizedStrings(langFile);
 
+// Thanks to Louis Hoebregts
+// for the particle functions
+// https://css-tricks.com/playing-with-particles-using-the-web-animations-api/
+
 class Tile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       open: props.open || false,
       imageUrl: "",
+      loadingImage: true,
     };
 
     this.open = this.open.bind(this);
     this.newImage = this.newImage.bind(this);
+    this.heartPop = this.heartPop.bind(this);
+    this.createParticle = this.createParticle.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +34,7 @@ class Tile extends React.Component {
       .then((data) => {
         this.setState({
           imageUrl: data[0].url,
+          loadingImage: false,
         });
       })
       .catch((e) => {
@@ -40,19 +48,67 @@ class Tile extends React.Component {
       this.forceUpdate();
     }
   }
+  heartPop(e) {
+    const { target } = e;
+    const rect = target.getBoundingClientRect();
+
+    const xCenter = (rect.right + rect.left) / 2;
+    const yCenter = (rect.top + rect.bottom) / 2;
+
+    for (let i = 0; i < 32; i++) {
+      this.createParticle(xCenter, yCenter);
+    }
+  }
+
+  createParticle(x, y) {
+    const particle = document.createElement("particle");
+    document.body.appendChild(particle);
+
+    const size = Math.floor(Math.random() * 23 + 10);
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.background = `hsl(${Math.random() * 100 + 250}, 80%, 60%)`;
+    const destinationX = x + (Math.random() - 0.5) * 2 * 150;
+    const destinationY = y + (Math.random() - 0.5) * 2 * 150;
+
+    const animation = particle.animate(
+      [
+        {
+          transform: `translate(${x - size / 2}px, ${y - size / 2}px)`,
+          opacity: 1,
+        },
+        {
+          transform: `translate(${destinationX}px, ${destinationY}px)`,
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 900 + Math.random() * 1300,
+        easing: "cubic-bezier(0, .9, .57, 1)",
+        delay: Math.random() * 500,
+      }
+    );
+
+    animation.onfinish = () => {
+      particle.remove();
+    };
+  }
 
   newImage() {
-    this.setState({ imageUrl: "" }, () => {
-      getBreedImage(this.props.breed)
-        .then((data) => {
-          this.setState({
-            imageUrl: data[0].url,
+    if (!this.state.loadingImage) {
+      this.setState({ imageUrl: "" }, () => {
+        getBreedImage(this.props.breed)
+          .then((data) => {
+            this.setState({
+              imageUrl: data[0].url,
+              loadingImage: false,
+            });
+          })
+          .catch((e) => {
+            console.log("error: ", e);
           });
-        })
-        .catch((e) => {
-          console.log("error: ", e);
-        });
-    });
+      });
+    }
   }
 
   open() {
@@ -88,7 +144,10 @@ class Tile extends React.Component {
             <div
               className="card-image tooltip"
               data-tooltip={lang.random.cuteKittens}
-              onClick={() => this.newImage()}
+              onClick={(e) => {
+                this.heartPop(e);
+                this.newImage();
+              }}
             >
               {this.state.imageUrl ? (
                 <img
@@ -134,6 +193,7 @@ class Tile extends React.Component {
               </div>
               <div className="card-bottom">
                 <MdFavorite
+                  id="heart"
                   style={{
                     color: this.props.favorited ? "#ff072a" : "rgb(63, 61, 86)",
                     width: "3.8rem",
@@ -141,9 +201,9 @@ class Tile extends React.Component {
                     padding: "0.5rem",
                     marginBottom: "0.5rem",
                   }}
-                  onClick={() =>
-                    this.props.handleFavoriteClick(this.props.data)
-                  }
+                  onClick={(e) => {
+                    this.props.handleFavoriteClick(this.props.data);
+                  }}
                 />
                 <button
                   className={

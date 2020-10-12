@@ -32,7 +32,10 @@ This single page React application showcases a fluid and responsive user interfa
 - React-reveal
 - React-Paginate
 - Material Ui icons
-- Game Icons https://game-icons.net/
+- Game Icons
+  https://game-icons.net/
+- Particle Effects by Louis Hoebregts
+  https://css-tricks.com/playing-with-particles-using-the-web-animations-api/
 
 ## Live Demo
 
