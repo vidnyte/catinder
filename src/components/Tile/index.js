@@ -23,7 +23,7 @@ class Tile extends React.Component {
   }
 
   componentDidMount() {
-    getBreedImage()
+    getBreedImage(this.props.breed)
       .then((data) => {
         this.setState({
           imageUrl: data[0].url,
@@ -43,7 +43,7 @@ class Tile extends React.Component {
 
   newImage() {
     this.setState({ imageUrl: "" }, () => {
-      getBreedImage()
+      getBreedImage(this.props.breed)
         .then((data) => {
           this.setState({
             imageUrl: data[0].url,
