@@ -228,7 +228,9 @@ class Options extends React.Component {
     if (this.state.breeds) {
       const breeds0 = this.state.breeds.filter((breed) => {
         if (this.state.search.length > 2) {
-          return this.state.search.includes(breed.name);
+          const searchLower = this.state.search.toLowerCase();
+          const breedLower = breed.name.toLowerCase();
+          return searchLower.includes(breedLower);
         } else {
           return true;
         }
