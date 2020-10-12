@@ -472,6 +472,9 @@ class Options extends React.Component {
 
     const mainInputWrapperStyle = {
       display: "block",
+      position: "relative",
+      height: "16rem",
+      width: "100%",
     };
 
     const myMenuStyle = {
@@ -480,10 +483,12 @@ class Options extends React.Component {
       background: "rgba(255, 255, 255, 0.9)",
       padding: "2px 0",
       fontSize: "90%",
-      position: "fixed",
+      position: "absolute",
+      top: "-8rem",
+      left: 0,
       overflow: "auto",
-      top: "1%",
       zIndex: 999999,
+      height: "16rem",
       maxHeight: "50%", // TODO: don't cheat, let it flow to the bottom
     };
 
