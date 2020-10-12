@@ -1,7 +1,7 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
 import { DebounceInput } from "react-debounce-input";
-import { MdFavorite, MdPets, MdCancel } from "react-icons/md";
+import { MdFavorite, MdSearch, MdPets, MdCancel } from "react-icons/md";
 import { GiWhiteCat, GiNestedHearts } from "react-icons/gi";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
@@ -470,11 +470,11 @@ class Options extends React.Component {
       width: "100%",
     };
 
-    const mainInputWrapperStyle = {
-      display: "block",
+    let mainInputWrapperStyle = {
+      display: "contents",
       position: "relative",
-      height: "16rem",
       width: "100%",
+      height: "15rem",
     };
 
     const myMenuStyle = {
@@ -484,12 +484,11 @@ class Options extends React.Component {
       padding: "2px 0",
       fontSize: "90%",
       position: "absolute",
-      top: "-8rem",
-      left: 0,
-      overflow: "auto",
+      top: "-6.5rem",
+      height: "8rem",
+      left: "1rem",
+      overflowY: "auto",
       zIndex: 999999,
-      height: "16rem",
-      maxHeight: "50%", // TODO: don't cheat, let it flow to the bottom
     };
 
     return (
@@ -509,7 +508,7 @@ class Options extends React.Component {
               <label className="form-label" htmlFor="input-search">
                 {lang.search.search}
               </label>
-              <div className="has-icon-right">
+              <div className="input-group">
                 <AutoComplete
                   inputProps={{
                     className: "form-input",
@@ -526,10 +525,9 @@ class Options extends React.Component {
                       key={item.id}
                       style={{
                         background: isHighlighted ? "lightgray" : "white",
-                        position: "relative",
                         zIndex: 1000,
                       }}
-                      className="form-input"
+                      className="form-item"
                     >
                       {item.name}
                     </div>
@@ -540,7 +538,8 @@ class Options extends React.Component {
                     this.handleOnSelect(val);
                   }}
                 />
-                <i
+                <button
+                  class="btn btn-primary input-group-btn"
                   onClick={() => {
                     if (this.state.searchCloseIcon) {
                       this.setState(
@@ -554,12 +553,13 @@ class Options extends React.Component {
                       );
                     }
                   }}
-                  className={
-                    this.state.searchCloseIcon
-                      ? "form-icon icon icon-cross cursorPointer"
-                      : "form-icon icon icon-search"
-                  }
-                />
+                >
+                  {this.state.searchCloseIcon ? (
+                    <MdCancel className="cursorPointer search-input-icon" />
+                  ) : (
+                    <MdSearch className="cursorPointer search-input-icon" />
+                  )}
+                </button>
               </div>
             </div>
           </div>
