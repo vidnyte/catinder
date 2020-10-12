@@ -91,6 +91,7 @@ class Options extends React.Component {
       origin: "",
       temperamentsList: TEMPERAMENT_LIST,
       temperaments: [],
+      temperament: "",
       breedsTotal: 0,
       searchCloseIcon: false,
     };
@@ -181,6 +182,11 @@ class Options extends React.Component {
       return breed !== temperament;
     });
 
+    console.log("temps: ", temps);
+
+    if (temps.length < 1) {
+      this.setState({ temperament: "" });
+    }
     this.setState({ temperaments: temps }, () => {
       this.doSearch();
     });
@@ -196,8 +202,6 @@ class Options extends React.Component {
       {
         search: value,
         searchCloseIcon: true,
-        origin: "",
-        temperaments: [],
       },
       () => {
         if (value && value.length > 2) {
@@ -205,8 +209,6 @@ class Options extends React.Component {
         } else {
           this.setState({
             search: value,
-            origin: "",
-            temperaments: [],
             searchCloseIcon: false,
           });
         }
@@ -327,8 +329,6 @@ class Options extends React.Component {
     this.setState(
       {
         origin: origin,
-        page: 0,
-        search: "",
       },
       () => {
         this.doSearch();
@@ -343,8 +343,7 @@ class Options extends React.Component {
     this.setState(
       {
         temperaments,
-        page: 0,
-        search: "",
+        temperament,
       },
       () => {
         this.doSearch();
@@ -366,7 +365,7 @@ class Options extends React.Component {
 
   renderBreeds() {
     const originOptions = [
-      <option key="origin-option" value="" defaultValue disabled>
+      <option key="origin-option" value="" defaultValue>
         {lang.inputs.chooseOrigin}
       </option>,
     ];
@@ -599,6 +598,7 @@ class Options extends React.Component {
                   onChange={(event) =>
                     this.handleTemperament(event.target.value)
                   }
+                  value={this.state.temperament}
                 >
                   {temperamentOptions}
                 </select>

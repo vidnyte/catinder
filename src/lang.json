@@ -28,7 +28,7 @@
     },
     "inputs": {
       "chooseOrigin": "Choose origin",
-      "addTemperamentFilter": "Add a TemperemantFilter"
+      "addTemperamentFilter": "Add Temperemant"
     },
     "pagination": {
       "next": "Next",
