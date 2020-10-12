@@ -146,7 +146,7 @@ class Tile extends React.Component {
       : false;
 
     return (
-      <div className="col-sm-12 col-md-4 bottom-margin">
+      <div className="col-xs-12 col-md-6 col-xl-4 bottom-margin">
         <Zoom duration={250}>
           <div className="card">
             <div
