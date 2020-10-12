@@ -182,8 +182,6 @@ class Options extends React.Component {
       return breed !== temperament;
     });
 
-    console.log("temps: ", temps);
-
     if (temps.length < 1) {
       this.setState({ temperament: "" });
     }
@@ -218,7 +216,13 @@ class Options extends React.Component {
 
   handleOnSelect(val) {
     this.setState(
-      { search: val, searchCloseIcon: true, origin: "", temperaments: [] },
+      {
+        search: val,
+        searchCloseIcon: true,
+        origin: "",
+        temperaments: [],
+        temperament: "",
+      },
       () => {
         this.doSearch();
       }
@@ -554,6 +558,7 @@ class Options extends React.Component {
                           searchCloseIcon: false,
                           origin: "",
                           temperaments: [],
+                          temperament: "",
                         },
                         () => this.setup()
                       );
