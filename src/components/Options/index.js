@@ -203,7 +203,7 @@ class Options extends React.Component {
         searchCloseIcon: true,
       },
       () => {
-        if (value && value.length > 2) {
+        if (value && value.length > 0) {
           this.doSearch();
         } else {
           this.setState({
@@ -223,6 +223,7 @@ class Options extends React.Component {
         origin: "",
         temperaments: [],
         temperament: "",
+        page: 0,
       },
       () => {
         this.doSearch();
@@ -334,6 +335,7 @@ class Options extends React.Component {
     this.setState(
       {
         origin: origin,
+        page: 0,
       },
       () => {
         this.doSearch();
@@ -349,6 +351,7 @@ class Options extends React.Component {
       {
         temperaments,
         temperament,
+        page: 0,
       },
       () => {
         this.doSearch();
