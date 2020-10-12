@@ -2,6 +2,8 @@
 
 ## Created by Erkka Virtanen ( vidnyte )
 
+<img src="./public/assets/images/catinder-logo-alt.svg" alt="Catinder Logo by Undraw" width="200"/>
+
 Developed during one weekend.
 This single page React application showcases a fluid and responsive user interface for viewing different cat breeds. You can search for you favorite cat breed or filter breeds by their origin country and temperaments. After finding your favorites you can save them for later viewing!
 
@@ -71,7 +73,3 @@ Launches the test runner in the interactive watch mode.<br />
 
 Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
-
-```
-
-```
