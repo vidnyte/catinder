@@ -193,23 +193,26 @@ class Options extends React.Component {
   }
 
   handleSearch(value) {
-    this.setState({
-      search: value,
-      searchCloseIcon: true,
-      origin: "",
-      temperaments: [],
-    });
-
-    if (value && value.length > 2) {
-      this.doSearch();
-    } else {
-      this.setState({
+    this.setState(
+      {
         search: value,
+        searchCloseIcon: true,
         origin: "",
         temperaments: [],
-        searchCloseIcon: false,
-      });
-    }
+      },
+      () => {
+        if (value && value.length > 2) {
+          this.doSearch();
+        } else {
+          this.setState({
+            search: value,
+            origin: "",
+            temperaments: [],
+            searchCloseIcon: false,
+          });
+        }
+      }
+    );
   }
 
   handleOnSelect(val) {
