@@ -3,7 +3,6 @@ import React from "react";
 import LocalizedStrings from "react-localization";
 import Header from "./../components/Header";
 import Options from "./../components/Options";
-import Results from "./../components/Results";
 import Footer from "./../components/Footer";
 import "./styles.css";
 import "./bootstrap.css";

@@ -7,6 +7,10 @@
   cursor: pointer;
 }
 
+.tab-item {
+  cursor: pointer;
+}
+
 .temperaments-wrapper {
   display: flex;
   justify-content: center;

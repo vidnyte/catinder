@@ -74,6 +74,7 @@ class Tile extends React.Component {
           {temp}
         </span>
       );
+      return null;
     });
 
     return (
@@ -86,7 +87,11 @@ class Tile extends React.Component {
               onClick={() => this.newImage()}
             >
               {this.state.imageUrl ? (
-                <img src={this.state.imageUrl} className="breed-image" />
+                <img
+                  src={this.state.imageUrl}
+                  alt={this.props.data.name}
+                  className="breed-image"
+                />
               ) : (
                 <Loader
                   type="ThreeDots"

@@ -1,6 +1,5 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
-import { DebounceInput } from "react-debounce-input";
 import { MdFavorite, MdSearch, MdPets, MdCancel } from "react-icons/md";
 import { GiWhiteCat, GiNestedHearts } from "react-icons/gi";
 import Fade from "react-reveal/Fade";
@@ -227,13 +226,8 @@ class Options extends React.Component {
   filterBreeds() {
     if (this.state.breeds) {
       const breeds0 = this.state.breeds.filter((breed) => {
-        if (this.state.search.length > 2) {
-          const searchLower = this.state.search.toLowerCase();
-          const breedLower = breed.name.toLowerCase();
-          return searchLower.includes(breedLower);
-        } else {
-          return true;
-        }
+        const regex = new RegExp(`${this.state.search.toLowerCase()}`, "i");
+        return regex.test(breed.name.toLowerCase());
       });
 
       let breeds = breeds0;
@@ -383,6 +377,8 @@ class Options extends React.Component {
           {origin}
         </option>
       );
+
+      return null;
     });
 
     const temperamentOptions = [
@@ -397,6 +393,7 @@ class Options extends React.Component {
           {temperament}
         </option>
       );
+      return null;
     });
 
     const temperamentChips = [];
@@ -428,6 +425,8 @@ class Options extends React.Component {
             />
           </span>
         );
+
+        return null;
       });
     }
 
@@ -437,6 +436,7 @@ class Options extends React.Component {
           {temperament}
         </option>
       );
+      return null;
     });
 
     const tiles = [];
@@ -456,6 +456,7 @@ class Options extends React.Component {
             language={this.props.language}
           />
         );
+        return null;
       });
     }
 
@@ -518,7 +519,13 @@ class Options extends React.Component {
                   }}
                   wrapperStyle={mainInputWrapperStyle}
                   getItemValue={(item) => item.name}
-                  items={this.state.breeds}
+                  items={this.state.breeds.filter((breed) => {
+                    const regex = new RegExp(
+                      `${this.state.search.toLowerCase()}`,
+                      "i"
+                    );
+                    return regex.test(breed.name.toLowerCase());
+                  })}
                   menuStyle={myMenuStyle}
                   renderItem={(item, isHighlighted) => (
                     <div
@@ -539,7 +546,7 @@ class Options extends React.Component {
                   }}
                 />
                 <button
-                  class="btn btn-primary input-group-btn"
+                  className="btn btn-primary input-group-btn"
                   onClick={() => {
                     if (this.state.searchCloseIcon) {
                       this.setState(
@@ -656,6 +663,7 @@ class Options extends React.Component {
             language={this.props.language}
           />
         );
+        return null;
       });
     }
 
@@ -699,7 +707,7 @@ class Options extends React.Component {
               this.handleViewClick("breeds");
             }}
           >
-            <a href="#">
+            <a href="">
               <MdPets
                 style={tabIconStyle}
                 className={
@@ -717,7 +725,7 @@ class Options extends React.Component {
               this.handleViewClick("favorites");
             }}
           >
-            <a href="#">
+            <a>
               <MdFavorite
                 style={tabIconStyle}
                 className={
