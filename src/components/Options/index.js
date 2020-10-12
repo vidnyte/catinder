@@ -131,6 +131,7 @@ class Options extends React.Component {
             page: 0,
             origin: "",
             temperaments: [],
+            temperament: "",
             search: this.state.breeds[randomInt].name,
             searchCloseIcon: true,
           });
