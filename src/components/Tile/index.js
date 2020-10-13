@@ -46,6 +46,7 @@ class Tile extends React.Component {
   componentDidUpdate(nextProps) {
     if (this.props.language !== nextProps.language) {
       lang.setLanguage(nextProps.language);
+      this.forceUpdate();
     }
   }
   heartPop(target) {
@@ -145,7 +146,10 @@ class Tile extends React.Component {
       : false;
 
     return (
-      <div className="col-xs-12 col-md-6 col-xl-4 bottom-margin">
+      <div
+        className="col-xs-12 col-md-6 col-xl-4 bottom-margin"
+        data-testid="tile-wrapper"
+      >
         <Zoom duration={250}>
           <div className="card">
             <div
@@ -174,17 +178,21 @@ class Tile extends React.Component {
               )}
             </div>
             <div className="card-header">
-              <div className="card-title h3">{this.props.data.name}</div>
+              <div className="card-title h3" data-testid="tile-name">
+                {this.props.data.name}
+              </div>
             </div>
             <div className="card-body">
               {validAltName && (
                 <div className="card-subtitle">
-                  <div className="h5 card-alt">{validAltName}</div>
+                  <div className="h5 card-alt" data-testid="tile-altname">
+                    {validAltName}
+                  </div>
                 </div>
               )}
 
               <div className="card-subtitle text-gray">{temperaments}</div>
-              <div className="card-description">
+              <div className="card-description" data-testid="tile-description">
                 {this.props.data.description}
               </div>
               <div className="card-subtitle text-gray">
