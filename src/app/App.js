@@ -42,7 +42,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" data-testid="app">
         <Header
           language={this.state.language}
           changeLanguage={this.changeLanguage}

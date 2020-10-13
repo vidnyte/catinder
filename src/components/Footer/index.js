@@ -10,12 +10,6 @@ const GitHubPath =
 const lang = new LocalizedStrings(langFile);
 
 class Footer extends React.Component {
-  constructor(props) {
-    super(props);
-
-    lang.setLanguage(props.language);
-  }
-
   componentDidUpdate(nextProps) {
     if (this.props.language !== nextProps.language) {
       lang.setLanguage(nextProps.language);
@@ -24,7 +18,7 @@ class Footer extends React.Component {
   render() {
     return (
       <Fade bottom>
-        <footer className="footer-wrapper">
+        <footer className="footer-wrapper" data-testid="footer-wrapper">
           <a
             href="https://github.com/vidnyte/catinder"
             className="catinder-navi"
@@ -33,6 +27,7 @@ class Footer extends React.Component {
               src={GitHubPath}
               className="logo-github"
               alt="Catinder GitHub Repository"
+              data-testid="footer-image"
             />
           </a>
           <span>{lang.footer.copyright} &#169; 2020 Catinder</span>

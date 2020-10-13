@@ -6,7 +6,7 @@ const logoPath =
 
 function Header(props) {
   return (
-    <header className="App-header">
+    <header className="App-header" data-testid="app-header">
       <header className="navbar row-no-margin">
         <section className="logo-wrapper col-sm-12 col-md-6">
           <div
@@ -16,11 +16,16 @@ function Header(props) {
               props.changeLanguage(props.language === "ca" ? "en" : "ca")
             }
           >
-            <img src={logoPath} className="logo-image" alt="Catinder logo" />
+            <img
+              src={logoPath}
+              className="logo-image"
+              alt="Catinder logo"
+              data-testid="catinder-logo-image"
+            />
           </div>
         </section>
         <section className="logo-wrapper col-sm-12 col-md-6">
-          <span href="#" className="catinder-logo">
+          <span className="catinder-logo" data-testid="catinder-logo-text">
             Catinder
           </span>
         </section>

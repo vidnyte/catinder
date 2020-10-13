@@ -46,7 +46,6 @@ class Tile extends React.Component {
   componentDidUpdate(nextProps) {
     if (this.props.language !== nextProps.language) {
       lang.setLanguage(nextProps.language);
-      this.forceUpdate();
     }
   }
   heartPop(target) {

@@ -741,7 +741,7 @@ class Options extends React.Component {
               this.handleViewClick("breeds");
             }}
           >
-            <a href="">
+            <a>
               <MdPets
                 style={tabIconStyle}
                 className={
