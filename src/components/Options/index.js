@@ -112,8 +112,6 @@ class Options extends React.Component {
     this.handleOnSelect = this.handleOnSelect.bind(this);
     this.handleRemoveTemperament = this.handleRemoveTemperament.bind(this);
     this.handleRandom = this.handleRandom.bind(this);
-
-    lang.setLanguage(props.language);
   }
 
   componentDidMount() {
@@ -732,7 +730,7 @@ class Options extends React.Component {
     };
     return (
       <>
-        <ul className="tab tab-block">
+        <ul className="tab tab-block" data-testid="tab-wrapper">
           <li
             className={
               this.state.view === "breeds" ? "tab-item active" : "tab-item"
@@ -772,7 +770,7 @@ class Options extends React.Component {
             </a>
           </li>
         </ul>
-        <div className="container">
+        <div className="container" data-testid="options-container">
           {this.state.view === "breeds"
             ? this.renderBreeds()
             : this.renderFavorites()}
