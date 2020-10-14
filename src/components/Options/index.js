@@ -1,6 +1,12 @@
 import React from "react";
 import LocalizedStrings from "react-localization";
-import { MdFavorite, MdSearch, MdPets, MdCancel } from "react-icons/md";
+import {
+  MdFavorite,
+  MdSearch,
+  MdPets,
+  MdCancel,
+  MdErrorOutline,
+} from "react-icons/md";
 import { GiWhiteCat, GiNestedHearts } from "react-icons/gi";
 import Fade from "react-reveal/Fade";
 import ReactPaginate from "react-paginate";
@@ -118,31 +124,29 @@ class Options extends React.Component {
     this.setup();
   }
 
-  handleRandom() {
-    (async () => {
-      this.setState({ loadingResults: true });
-      try {
-        const data = await getBreeds(this.props.breed);
-        const randomInt = Math.floor(Math.random() * data.length);
+  async handleRandom() {
+    this.setState({ loadingResults: true });
+    try {
+      const data = await getBreeds(this.props.breed);
+      const randomInt = Math.floor(Math.random() * data.length);
 
-        this.setState({
-          breedsTotal: data.length,
-          breeds: data,
-          loadingResults: false,
-          results: [data[randomInt]],
-          pageCount: 0,
-          page: 0,
-          origin: "",
-          temperaments: [],
-          temperament: "",
-          search: data[randomInt].name,
-          searchCloseIcon: true,
-        });
-      } catch (e) {
-        console.log("Handle Random Breed Error: ", e);
-        this.setState({ error: true, errorMessage: e.message });
-      }
-    })();
+      this.setState({
+        breedsTotal: data.length,
+        breeds: data,
+        loadingResults: false,
+        results: [data[randomInt]],
+        pageCount: 0,
+        page: 0,
+        origin: "",
+        temperaments: [],
+        temperament: "",
+        search: data[randomInt].name,
+        searchCloseIcon: true,
+      });
+    } catch (e) {
+      console.log("Handle Random Breed Error: ", e);
+      this.setState({ error: true, errorMessage: e.message });
+    }
   }
 
   componentDidUpdate(nextProps) {
@@ -151,33 +155,31 @@ class Options extends React.Component {
     }
   }
 
-  setup() {
-    (async () => {
+  async setup() {
+    try {
+      const data = await getBreeds(this.props.breed);
+      this.setState({
+        breedsTotal: data.length,
+        breeds: data,
+        loadingResults: true,
+      });
+
+      const breeds = await getBreeds(this.state.page, this.state.limit);
+
       try {
-        const data = await getBreeds(this.props.breed);
         this.setState({
-          breedsTotal: data.length,
-          breeds: data,
-          loadingResults: true,
+          results: breeds,
+          loadingResults: false,
+          pageCount: Math.ceil(this.state.breedsTotal / this.state.limit),
         });
-
-        const breeds = await getBreeds(this.state.page, this.state.limit);
-
-        try {
-          this.setState({
-            results: breeds,
-            loadingResults: false,
-            pageCount: Math.ceil(this.state.breedsTotal / this.state.limit),
-          });
-        } catch (e) {
-          console.log("getBreeds error: ", e);
-          this.setState({ error: true, errorMessage: e.message });
-        }
       } catch (e) {
-        console.log("getBreedsTotal error: ", e);
+        console.log("getBreeds error: ", e);
         this.setState({ error: true, errorMessage: e.message });
       }
-    })();
+    } catch (e) {
+      console.log("getBreedsTotal error: ", e);
+      this.setState({ error: true, errorMessage: e.message });
+    }
   }
 
   handleRemoveTemperament(temperament) {
@@ -368,7 +370,12 @@ class Options extends React.Component {
       },
       () => {
         this.doSearch();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        const scrollToElement = document.getElementById("results");
+        window.scrollTo({
+          top: scrollToElement.offsetTop - 64,
+          behavior: "smooth",
+        });
       }
     );
   }
@@ -481,10 +488,9 @@ class Options extends React.Component {
     };
 
     let mainInputWrapperStyle = {
-      display: "contents",
+      display: "block",
       position: "relative",
       width: "100%",
-      height: "15rem",
     };
 
     const myMenuStyle = {
@@ -494,9 +500,9 @@ class Options extends React.Component {
       padding: "2px 0",
       fontSize: "90%",
       position: "absolute",
-      top: "-6.5rem",
+      top: "-8.2rem",
       height: "8rem",
-      left: "1rem",
+      left: "0.5rem",
       overflowY: "auto",
       zIndex: 999999,
     };
@@ -508,11 +514,21 @@ class Options extends React.Component {
       padding: "2px 0",
       fontSize: "90%",
       position: "absolute",
-      top: "-2.5rem",
-      height: "4rem",
-      left: "1rem",
+      top: "-8.2rem",
+      height: "8rem",
+      left: "0.5rem",
       overflowY: "auto",
       zIndex: 999999,
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      width: "100%",
+    };
+
+    const noResultsIconStyle = {
+      width: "1.5rem",
+      height: "1.5rem",
+      marginTop: "0.5rem",
     };
 
     const filtered = this.state.breeds.filter((breed) => {
@@ -522,8 +538,8 @@ class Options extends React.Component {
 
     return (
       <Fade bottom cascade>
-        <div className="row options-wrapper">
-          <div className="col-12">
+        <div className="options-wrapper">
+          <div className="">
             <div
               className="tooltip cursorPointer"
               data-tooltip={`${lang.random.clickMe}`}
@@ -532,8 +548,8 @@ class Options extends React.Component {
               <GiWhiteCat style={tabIconStyleLogo} />
             </div>
           </div>
-          <div className="col-sm-12 col-md-6">
-            <div className="form-group">
+          <div className="options-top">
+            <div className="form-group options-search">
               <label className="form-label" htmlFor="input-search">
                 {lang.search.search}
               </label>
@@ -557,6 +573,9 @@ class Options extends React.Component {
                     ) : (
                       <div style={{ ...style, ...myMenuStyleNotFound }}>
                         <span className="h4">{lang.search.noResultsFound}</span>
+                        <span className="no-results-icon">
+                          <MdErrorOutline style={noResultsIconStyle} />
+                        </span>
                       </div>
                     );
                   }}
@@ -603,77 +622,76 @@ class Options extends React.Component {
                 </button>
               </div>
             </div>
-          </div>
-          <div className="col-sm-12 col-md-3">
-            <div className="form-group">
-              <label className="form-label" htmlFor="input-origin">
-                {lang.search.origin}
-              </label>
+            <div className="options-option">
               <div className="form-group">
-                <select
-                  className="form-select"
-                  id="input-origin"
-                  onChange={(event) => this.handleOrigin(event.target.value)}
-                  value={this.state.origin}
-                >
-                  {originOptions}
-                </select>
+                <label className="form-label" htmlFor="input-origin">
+                  {lang.search.origin}
+                </label>
+                <div className="form-group">
+                  <select
+                    className="form-select"
+                    id="input-origin"
+                    onChange={(event) => this.handleOrigin(event.target.value)}
+                    value={this.state.origin}
+                  >
+                    {originOptions}
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-sm-12 col-md-3">
-            <div className="form-group">
-              <label className="form-label" htmlFor="input-temperament">
-                {lang.search.temperament}
-              </label>
+            <div className="options-option">
               <div className="form-group">
-                <select
-                  className="form-select"
-                  id="input-temperament"
-                  onChange={(event) =>
-                    this.handleTemperament(event.target.value)
-                  }
-                  value={this.state.temperament}
-                >
-                  {temperamentOptions}
-                </select>
+                <label className="form-label" htmlFor="input-temperament">
+                  {lang.search.temperament}
+                </label>
+                <div className="form-group">
+                  <select
+                    className="form-select"
+                    id="input-temperament"
+                    onChange={(event) =>
+                      this.handleTemperament(event.target.value)
+                    }
+                    value={this.state.temperament}
+                  >
+                    {temperamentOptions}
+                  </select>
 
-                <div className="temperaments-wrapper">{temperamentChips}</div>
+                  <div className="temperaments-wrapper">{temperamentChips}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="options-results" id="results">
           {this.state.loadingResults ? (
-            <div className="col-12">
-              {" "}
-              <Loading />{" "}
+            <div className="options-wide">
+              <Loading />
             </div>
           ) : (
             tiles
           )}
-          <div className="col-12">
-            <div className="panel-footer">
-              {this.state.results && this.state.results.length > 1 && (
-                <ReactPaginate
-                  previousLabel={lang.pagination.previous}
-                  nextLabel={lang.pagination.next}
-                  breakLabel={"..."}
-                  breakClassName={"break-me"}
-                  pageCount={this.state.pageCount}
-                  forcePage={this.state.page}
-                  marginPagesDisplayed={this.state.neighgbours}
-                  pageRangeDisplayed={this.state.pageRange}
-                  onPageChange={this.handlePageClick}
-                  initialPage={this.state.page}
-                  containerClassName={"pagination justify-content-center"}
-                  pageClassName={"page-item"}
-                  activeClassName={"page-item active"}
-                  previousClassName={"page-item"}
-                  nextClassName={"page-item"}
-                />
-              )}
-            </div>
+        </div>
+        <div className="options-wide">
+          <div className="panel-footer">
+            {this.state.results && this.state.results.length > 1 && (
+              <ReactPaginate
+                previousLabel={lang.pagination.previous}
+                nextLabel={lang.pagination.next}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={this.state.pageCount}
+                forcePage={this.state.page}
+                marginPagesDisplayed={this.state.neighgbours}
+                pageRangeDisplayed={this.state.pageRange}
+                onPageChange={this.handlePageClick}
+                initialPage={this.state.page}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                activeClassName={"page-item active"}
+                previousClassName={"page-item"}
+                nextClassName={"page-item"}
+              />
+            )}
           </div>
         </div>
       </Fade>
@@ -711,14 +729,14 @@ class Options extends React.Component {
 
     return (
       <Fade cascade>
-        <div className="row options-wrapper">
-          <div className="col-12">
-            <GiNestedHearts style={tabIconStyleLogo} />
-          </div>
+        <div className="options-heart">
+          <GiNestedHearts style={tabIconStyleLogo} />
+        </div>
+        <div className="options-favorites">
           {tiles && tiles.length > 0 ? (
             tiles
           ) : (
-            <div className="col-12">
+            <div className="options-no-favorites">
               <span className="h3">{lang.favorites.noFavoritesYet}</span>
             </div>
           )}
@@ -773,7 +791,7 @@ class Options extends React.Component {
             </a>
           </li>
         </ul>
-        <div className="container" data-testid="options-container">
+        <div className="options-container" data-testid="options-container">
           {this.state.view === "breeds"
             ? this.renderBreeds()
             : this.renderFavorites()}

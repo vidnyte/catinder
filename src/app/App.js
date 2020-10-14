@@ -5,7 +5,6 @@ import Header from "./../components/Header";
 import Options from "./../components/Options";
 import Footer from "./../components/Footer";
 import "./styles.css";
-import "./bootstrap.css";
 import "./spectre.min.css";
 import "./spectre-icons.min.css";
 

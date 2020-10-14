@@ -8,6 +8,17 @@
   color: #333;
 }
 
+.tile-grid {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: baseline;
+}
+
+.card-grid {
+  max-width: 16rem;
+}
+
 .card-bottom {
   margin-top: 1rem;
   display: flex;
@@ -27,6 +38,7 @@
 .card-description {
   margin-top: 1.5rem;
   margin-bottom: 1rem;
+  color: #28263e;
 }
 
 .card-alt {

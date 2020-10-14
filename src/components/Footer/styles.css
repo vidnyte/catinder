@@ -4,14 +4,15 @@
 }
 
 .footer-wrapper {
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .footer-subtitle {
   font-family: "Poppins", sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #28263e;
 }
 
 .footer-link {
@@ -24,6 +25,7 @@
   height: 2rem;
   padding: 0.25rem;
   margin: 0.5rem;
+  margin-bottom: 1rem;
   background: #3f3d56;
   border-radius: 34px;
   cursor: pointer;

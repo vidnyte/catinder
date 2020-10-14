@@ -30,7 +30,9 @@ class Footer extends React.Component {
               data-testid="footer-image"
             />
           </a>
-          <span>{lang.footer.copyright} &#169; 2020 Catinder</span>
+          <span className="footer-subtitle">
+            {lang.footer.copyright} &#169; 2020 Catinder
+          </span>
         </footer>
       </Fade>
     );

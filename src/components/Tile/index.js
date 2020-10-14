@@ -28,18 +28,16 @@ class Tile extends React.Component {
     this.createParticle = this.createParticle.bind(this);
   }
 
-  componentDidMount() {
-    (async () => {
-      try {
-        const data = await getBreedImage(this.props.breed);
-        this.setState({
-          imageUrl: data[0].url,
-          loadingImage: false,
-        });
-      } catch (e) {
-        console.log("Error loading breed image: ", e);
-      }
-    })();
+  async componentDidMount() {
+    try {
+      const data = await getBreedImage(this.props.breed);
+      this.setState({
+        imageUrl: data[0].url,
+        loadingImage: false,
+      });
+    } catch (e) {
+      console.log("Error loading breed image: ", e);
+    }
   }
 
   componentDidUpdate(nextProps) {
@@ -48,6 +46,7 @@ class Tile extends React.Component {
       this.forceUpdate();
     }
   }
+
   heartPop(target) {
     if (this.state.showAnim) {
       const rect = target.getBoundingClientRect();
@@ -96,21 +95,19 @@ class Tile extends React.Component {
     };
   }
 
-  newImage() {
-    (async () => {
-      if (!this.state.loadingImage) {
-        this.setState({ imageUrl: "" });
-        try {
-          const data = await getBreedImage(this.props.breed);
-          this.setState({
-            imageUrl: data[0].url,
-            loadingImage: false,
-          });
-        } catch (e) {
-          console.log("Error loading new breed image: ", e);
-        }
+  async newImage() {
+    if (!this.state.loadingImage) {
+      this.setState({ imageUrl: "" });
+      try {
+        const data = await getBreedImage(this.props.breed);
+        this.setState({
+          imageUrl: data[0].url,
+          loadingImage: false,
+        });
+      } catch (e) {
+        console.log("Error loading new breed image: ", e);
       }
-    })();
+    }
   }
 
   render() {
@@ -120,7 +117,10 @@ class Tile extends React.Component {
       temperaments.push(
         <span
           key={`${this.props.data.name}_${temp}`}
-          style={{ background: "#3f3d56", color: "#ffd4d4" }}
+          style={{
+            background: "#3f3d56",
+            color: this.props.favorited ? "white" : "#ffd4d4",
+          }}
           className="chip"
         >
           {temp}
@@ -134,12 +134,16 @@ class Tile extends React.Component {
       : false;
 
     return (
-      <div
-        className="col-xs-12 col-md-6 col-xl-4 bottom-margin"
-        data-testid="tile-wrapper"
-      >
+      <div className="bottom-margin tile-grid" data-testid="tile-wrapper">
         <Zoom duration={250}>
-          <div className="card">
+          <div
+            className="card card-grid"
+            style={{
+              background: this.props.favorited
+                ? "rgb(255, 218, 223)"
+                : "#e4e5e7",
+            }}
+          >
             <div
               className="card-image tooltip"
               data-tooltip={lang.random.cuteKittens}
