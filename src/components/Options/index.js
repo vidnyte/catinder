@@ -119,27 +119,30 @@ class Options extends React.Component {
   }
 
   handleRandom() {
-    getBreeds()
-      .then((data) => {
-        this.setState({ breedsTotal: data.length, breeds: data }, () => {
-          const randomInt = Math.floor(Math.random() * this.state.breedsTotal);
+    (async () => {
+      this.setState({ loadingResults: true });
+      try {
+        const data = await getBreeds(this.props.breed);
+        const randomInt = Math.floor(Math.random() * data.length);
 
-          this.setState({
-            results: [this.state.breeds[randomInt]],
-            pageCount: 0,
-            page: 0,
-            origin: "",
-            temperaments: [],
-            temperament: "",
-            search: this.state.breeds[randomInt].name,
-            searchCloseIcon: true,
-          });
+        this.setState({
+          breedsTotal: data.length,
+          breeds: data,
+          loadingResults: false,
+          results: [data[randomInt]],
+          pageCount: 0,
+          page: 0,
+          origin: "",
+          temperaments: [],
+          temperament: "",
+          search: data[randomInt].name,
+          searchCloseIcon: true,
         });
-      })
-      .catch((e) => {
-        console.log("getBreedsTotal error: ", e);
+      } catch (e) {
+        console.log("Handle Random Breed Error: ", e);
         this.setState({ error: true, errorMessage: e.message });
-      });
+      }
+    })();
   }
 
   componentDidUpdate(nextProps) {
@@ -149,32 +152,32 @@ class Options extends React.Component {
   }
 
   setup() {
-    getBreeds()
-      .then((data) => {
-        this.setState({ breedsTotal: data.length, breeds: data }, () => {
-          this.setState({ loadingResults: true }, () => {
-            getBreeds(this.state.page, this.state.limit)
-              .then((breeds) => {
-                this.setState({
-                  results: breeds,
-                  loadingResults: false,
-                  pageCount: Math.ceil(
-                    this.state.breedsTotal / this.state.limit
-                  ),
-                });
-              })
-              .catch((e) => {
-                console.log("getBreeds error: ", e);
-                this.setState({ error: true, errorMessage: e.message });
-              });
-          });
+    (async () => {
+      try {
+        const data = await getBreeds(this.props.breed);
+        this.setState({
+          breedsTotal: data.length,
+          breeds: data,
+          loadingResults: true,
         });
-      })
 
-      .catch((e) => {
+        const breeds = await getBreeds(this.state.page, this.state.limit);
+
+        try {
+          this.setState({
+            results: breeds,
+            loadingResults: false,
+            pageCount: Math.ceil(this.state.breedsTotal / this.state.limit),
+          });
+        } catch (e) {
+          console.log("getBreeds error: ", e);
+          this.setState({ error: true, errorMessage: e.message });
+        }
+      } catch (e) {
         console.log("getBreedsTotal error: ", e);
         this.setState({ error: true, errorMessage: e.message });
-      });
+      }
+    })();
   }
 
   handleRemoveTemperament(temperament) {

@@ -18,29 +18,28 @@ class Tile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: props.open || false,
       imageUrl: "",
       loadingImage: true,
       showAnim: false,
     };
 
-    this.open = this.open.bind(this);
     this.newImage = this.newImage.bind(this);
     this.heartPop = this.heartPop.bind(this);
     this.createParticle = this.createParticle.bind(this);
   }
 
   componentDidMount() {
-    getBreedImage(this.props.breed)
-      .then((data) => {
+    (async () => {
+      try {
+        const data = await getBreedImage(this.props.breed);
         this.setState({
           imageUrl: data[0].url,
           loadingImage: false,
         });
-      })
-      .catch((e) => {
-        console.log("error: ", e);
-      });
+      } catch (e) {
+        console.log("Error loading breed image: ", e);
+      }
+    })();
   }
 
   componentDidUpdate(nextProps) {
@@ -97,32 +96,21 @@ class Tile extends React.Component {
     };
   }
 
-  newImage(e) {
-    if (!this.state.loadingImage) {
-      this.setState({ imageUrl: "" }, () => {
-        getBreedImage(this.props.breed)
-          .then((data) => {
-            this.setState(
-              {
-                imageUrl: data[0].url,
-                loadingImage: false,
-              },
-              () => {
-                //this.heartPop(xCenter, yCenter);
-              }
-            );
-          })
-          .catch((e) => {
-            console.log("error: ", e);
+  newImage() {
+    (async () => {
+      if (!this.state.loadingImage) {
+        this.setState({ imageUrl: "" });
+        try {
+          const data = await getBreedImage(this.props.breed);
+          this.setState({
+            imageUrl: data[0].url,
+            loadingImage: false,
           });
-      });
-    }
-  }
-
-  open() {
-    this.setState({
-      open: true,
-    });
+        } catch (e) {
+          console.log("Error loading new breed image: ", e);
+        }
+      }
+    })();
   }
 
   render() {
@@ -172,8 +160,8 @@ class Tile extends React.Component {
                 <Loader
                   type="ThreeDots"
                   color="#ff072a"
-                  height={100}
-                  width={100}
+                  height={"15rem"}
+                  width={"7rem"}
                 />
               )}
             </div>
