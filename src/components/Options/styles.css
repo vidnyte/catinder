@@ -99,3 +99,7 @@
 .no-results-icon {
   width: 100%;
 }
+
+.center-pagination {
+  justify-content: center;
+}

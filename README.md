@@ -9,7 +9,7 @@ This single page React application showcases a fluid and responsive user interfa
 
 ## Features
 
-- Responsive mobile friendly implementation
+- Responsive mobile friendly implementation with CSS Grid
 - Multiple language support built-in
 - Random cat breed feature
 - Saving favorite breeds to browser's localStorage for later sessions
@@ -24,7 +24,6 @@ This single page React application showcases a fluid and responsive user interfa
 - The Cat API
   https://thecatapi.com/
 - React
-- Bootstrap
 - Spectre.css
 - Illustration and logo from Undraw
   https://undraw.co/

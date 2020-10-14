@@ -685,7 +685,7 @@ class Options extends React.Component {
                 pageRangeDisplayed={this.state.pageRange}
                 onPageChange={this.handlePageClick}
                 initialPage={this.state.page}
-                containerClassName={"pagination justify-content-center"}
+                containerClassName={"pagination center-pagination"}
                 pageClassName={"page-item"}
                 activeClassName={"page-item active"}
                 previousClassName={"page-item"}
