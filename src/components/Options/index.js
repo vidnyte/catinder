@@ -690,9 +690,12 @@ class Options extends React.Component {
                 initialPage={this.state.page}
                 containerClassName={"pagination center-pagination"}
                 pageClassName={"page-item"}
+                nextClassName={"page-item"}
+                pageLinkClassName={"page-item-pointer"}
                 activeClassName={"page-item active"}
                 previousClassName={"page-item"}
-                nextClassName={"page-item"}
+                previousLinkClassName={"page-item-pointer"}
+                nextLinkClassName={"page-item-pointer"}
               />
             )}
           </div>

@@ -103,3 +103,7 @@
 .center-pagination {
   justify-content: center;
 }
+
+.page-item-pointer {
+  cursor: pointer;
+}
