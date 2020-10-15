@@ -25,11 +25,12 @@ This single page React application showcases a fluid and responsive user interfa
   https://thecatapi.com/
 - React
 - Spectre.css
-- Illustration and logo from Undraw
+- Logo from Undraw
   https://undraw.co/
 - React-localization
 - React-reveal
 - React-paginate
+- React-lazyload
 - Material UI icons
 - Game Icons
   https://game-icons.net/

@@ -1,6 +1,7 @@
 import React from "react";
 import Zoom from "react-reveal/Zoom";
 import LocalizedStrings from "react-localization";
+import LazyLoad from "react-lazyload";
 import Loader from "react-loader-spinner";
 import { MdFavorite } from "react-icons/md";
 import { getBreedImage } from "./../../controllers/cat";
@@ -35,7 +36,6 @@ class Tile extends React.Component {
       const data = await getBreedImage(this.props.breed);
       this.setState({
         imageUrl: data[0].url,
-        loadingImage: false,
       });
     } catch (e) {
       console.log("Error loading breed image: ", e);
@@ -59,6 +59,8 @@ class Tile extends React.Component {
       for (let i = 0; i < 32; i++) {
         this.createParticle(xCenter, yCenter);
       }
+    } else {
+      this.setState({ loadingImage: false });
     }
     this.setState({ showAnim: true });
   }
@@ -98,13 +100,12 @@ class Tile extends React.Component {
   }
 
   async newImage() {
-    if (!this.state.loadingImage) {
+    if (this.state.imageUrl) {
       this.setState({ imageUrl: "" });
       try {
         const data = await getBreedImage(this.props.breed);
         this.setState({
           imageUrl: data[0].url,
-          loadingImage: false,
         });
       } catch (e) {
         console.log("Error loading new breed image: ", e);
@@ -120,8 +121,10 @@ class Tile extends React.Component {
         <span
           key={`${this.props.data.name}_${temp}`}
           style={{
-            background: "#3f3d56",
-            color: this.props.favorited ? "white" : "#ffd4d4",
+            background: this.props.favorited
+              ? "rgb(255, 9, 43)"
+              : "rgb(44, 35, 142)",
+            color: "white",
           }}
           className="chip"
         >
@@ -148,25 +151,30 @@ class Tile extends React.Component {
           >
             <div
               className="card-image tooltip"
+              style={{
+                background: this.props.favorited ? "rgb(255 7 41)" : "#918fff",
+              }}
               data-tooltip={lang.random.cuteKittens}
               onClick={(e) => {
                 this.newImage(e);
               }}
             >
               {this.state.imageUrl ? (
-                <img
-                  src={this.state.imageUrl}
-                  alt={this.props.data.name}
-                  className="breed-image"
-                  onLoad={(e) => {
-                    this.heartPop(e.target);
-                  }}
-                />
+                <LazyLoad height={"15rem"} offset={160} once>
+                  <img
+                    src={this.state.imageUrl}
+                    alt={this.props.data.name}
+                    className="breed-image"
+                    onLoad={(e) => {
+                      this.heartPop(e.target);
+                    }}
+                  />
+                </LazyLoad>
               ) : (
                 <Loader
                   type="ThreeDots"
-                  color="#ff072a"
-                  height={"15rem"}
+                  color="rgb(63, 50, 199)"
+                  height={"14rem"}
                   width={"7rem"}
                 />
               )}
