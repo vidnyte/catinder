@@ -17,7 +17,7 @@ This single page React application showcases a fluid and responsive user interfa
 
 ## Easter Egg!
 
-- Clicking the Catinder logo TWO times to change the language! Meow!
+- Try clicking the Catinder logo to change the language! Meow!
 
 ## Thanks to and developed with the help of the following libraries and APIs:
 

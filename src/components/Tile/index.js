@@ -23,6 +23,8 @@ class Tile extends React.Component {
       showAnim: false,
     };
 
+    lang.setLanguage(props.language);
+
     this.newImage = this.newImage.bind(this);
     this.heartPop = this.heartPop.bind(this);
     this.createParticle = this.createParticle.bind(this);
@@ -40,9 +42,9 @@ class Tile extends React.Component {
     }
   }
 
-  componentDidUpdate(nextProps) {
-    if (this.props.language !== nextProps.language) {
-      lang.setLanguage(nextProps.language);
+  componentDidUpdate(prevProps) {
+    if (this.props.language !== prevProps.language) {
+      lang.setLanguage(this.props.language);
       this.forceUpdate();
     }
   }

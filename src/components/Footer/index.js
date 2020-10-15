@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import LocalizedStrings from "react-localization";
 import Fade from "react-reveal/Fade";
 import langFile from "./../../lang.json";
@@ -9,34 +9,34 @@ const GitHubPath =
 
 const lang = new LocalizedStrings(langFile);
 
-class Footer extends React.Component {
-  componentDidUpdate(nextProps) {
-    if (this.props.language !== nextProps.language) {
-      lang.setLanguage(nextProps.language);
+function Footer(props) {
+  const [myLang, setMyLang] = useState(props.language);
+  lang.setLanguage(props.language);
+
+  useEffect(() => {
+    if (props.language !== myLang) {
+      lang.setLanguage(props.language);
+      setMyLang(props.language);
     }
-  }
-  render() {
-    return (
-      <Fade bottom>
-        <footer className="footer-wrapper" data-testid="footer-wrapper">
-          <a
-            href="https://github.com/vidnyte/catinder"
-            className="catinder-navi"
-          >
-            <img
-              src={GitHubPath}
-              className="logo-github"
-              alt="Catinder GitHub Repository"
-              data-testid="footer-image"
-            />
-          </a>
-          <span className="footer-subtitle">
-            {lang.footer.copyright} &#169; 2020 Catinder
-          </span>
-        </footer>
-      </Fade>
-    );
-  }
+  }, [props.language, myLang]);
+
+  return (
+    <Fade bottom>
+      <footer className="footer-wrapper" data-testid="footer-wrapper">
+        <a href="https://github.com/vidnyte/catinder" className="catinder-navi">
+          <img
+            src={GitHubPath}
+            className="logo-github"
+            alt="Catinder GitHub Repository"
+            data-testid="footer-image"
+          />
+        </a>
+        <span className="footer-subtitle">
+          {lang.footer.copyright} &#169; 2020 Catinder
+        </span>
+      </footer>
+    </Fade>
+  );
 }
 
 export default Footer;

@@ -1,16 +1,11 @@
 import dotenv from "dotenv";
-import React from "react";
-import LocalizedStrings from "react-localization";
+import React, { useState } from "react";
 import Header from "./../components/Header";
 import Options from "./../components/Options";
 import Footer from "./../components/Footer";
 import "./styles.css";
 import "./spectre.min.css";
 import "./spectre-icons.min.css";
-
-import langFile from "./../lang.json";
-
-const lang = new LocalizedStrings(langFile);
 
 dotenv.config();
 
@@ -21,36 +16,21 @@ if (!language) {
   language = "en";
 }
 
-class App extends React.Component {
-  constructor() {
-    super();
+function App() {
+  const [myLang, setMyLang] = useState(language);
 
-    this.state = {
-      language,
-    };
+  const saveLanguage = (lng) => {
+    localStorage.setItem("language", lng);
+    setMyLang(lng);
+  };
 
-    this.changeLanguage = this.changeLanguage.bind(this);
-  }
-
-  changeLanguage(langi) {
-    this.setState({ language: langi }, () => {
-      lang.setLanguage(this.state.language);
-      this.forceUpdate();
-    });
-  }
-
-  render() {
-    return (
-      <div className="App" data-testid="app">
-        <Header
-          language={this.state.language}
-          changeLanguage={this.changeLanguage}
-        />
-        <Options language={this.state.language} />
-        <Footer language={this.state.language} />
-      </div>
-    );
-  }
+  return (
+    <div className="App" data-testid="app">
+      <Header language={myLang} changeLanguage={(lng) => saveLanguage(lng)} />
+      <Options language={myLang} />
+      <Footer language={myLang} />
+    </div>
+  );
 }
 
 export default App;

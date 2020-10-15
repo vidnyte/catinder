@@ -103,6 +103,8 @@ class Options extends React.Component {
       searchCloseIcon: false,
     };
 
+    lang.setLanguage(props.language);
+
     this.setup = this.setup.bind(this);
     this.addFavoriteBreed = this.addFavoriteBreed.bind(this);
     this.removeFavoriteBreed = this.removeFavoriteBreed.bind(this);
@@ -122,6 +124,13 @@ class Options extends React.Component {
 
   componentDidMount() {
     this.setup();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.language !== prevProps.language) {
+      lang.setLanguage(this.props.language);
+      this.forceUpdate();
+    }
   }
 
   async handleRandom() {
@@ -146,12 +155,6 @@ class Options extends React.Component {
     } catch (e) {
       console.log("Handle Random Breed Error: ", e);
       this.setState({ error: true, errorMessage: e.message });
-    }
-  }
-
-  componentDidUpdate(nextProps) {
-    if (this.props.language !== nextProps.language) {
-      lang.setLanguage(nextProps.language);
     }
   }
 
@@ -370,10 +373,9 @@ class Options extends React.Component {
       },
       () => {
         this.doSearch();
-
         const scrollToElement = document.getElementById("results");
         window.scrollTo({
-          top: scrollToElement.offsetTop - 64,
+          top: scrollToElement.offsetTop - 140,
           behavior: "smooth",
         });
       }
@@ -681,6 +683,7 @@ class Options extends React.Component {
                 breakClassName={"break-me"}
                 pageCount={this.state.pageCount}
                 forcePage={this.state.page}
+                disableInitialCallback
                 marginPagesDisplayed={this.state.neighgbours}
                 pageRangeDisplayed={this.state.pageRange}
                 onPageChange={this.handlePageClick}
