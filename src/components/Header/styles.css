@@ -25,10 +25,19 @@
   align-items: center;
 }
 
+.navbarCenter {
+  justify-content: center;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
 .catinder-logo {
   font-family: "Poppins", sans-serif;
   font-size: 3rem;
   font-weight: 400;
+  margin: 0.6rem;
+  margin-bottom: 1rem;
   text-shadow: 4px 4px 0px #3f3d56;
 }
 

@@ -7,8 +7,8 @@ const logoPath =
 function Header(props) {
   return (
     <header className="App-header" data-testid="app-header">
-      <header className="navbar row-no-margin">
-        <section className="logo-wrapper col-sm-12 col-md-6">
+      <header className="navbarCenter">
+        <section className="logo-wrapper">
           <div
             className="tooltip tooltip-bottom cursorPointer"
             data-tooltip="Click me for more MEOWS!"
@@ -24,7 +24,7 @@ function Header(props) {
             />
           </div>
         </section>
-        <section className="logo-wrapper col-sm-12 col-md-6">
+        <section className="logo-wrapper">
           <span className="catinder-logo" data-testid="catinder-logo-text">
             Catinder
           </span>
