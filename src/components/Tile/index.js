@@ -146,7 +146,7 @@ class Tile extends React.Component {
             style={{
               background: this.props.favorited
                 ? "rgb(255, 218, 223)"
-                : "#e4e5e7",
+                : "rgb(218, 230, 255)",
             }}
           >
             <div
