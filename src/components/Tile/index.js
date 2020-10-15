@@ -180,7 +180,10 @@ class Tile extends React.Component {
               )}
             </div>
             <div className="card-header">
-              <div className="card-title h3" data-testid="tile-name">
+              <div
+                className="card-title h3 title-color"
+                data-testid="tile-name"
+              >
                 {this.props.data.name}
               </div>
             </div>
